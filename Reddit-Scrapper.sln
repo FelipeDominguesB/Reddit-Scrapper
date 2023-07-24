@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33213.308
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReadSubredditScrapper", "ReadSubredditScrapper\ReadSubredditScrapper.csproj", "{F9DC1B38-14F8-4854-B98F-5B44AFFD781A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedditScrapper", "RedditScrapper\RedditScrapper.csproj", "{6FF6DA30-483D-41A6-9F4C-A8F38D3519BB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F9DC1B38-14F8-4854-B98F-5B44AFFD781A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9DC1B38-14F8-4854-B98F-5B44AFFD781A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9DC1B38-14F8-4854-B98F-5B44AFFD781A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9DC1B38-14F8-4854-B98F-5B44AFFD781A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6FF6DA30-483D-41A6-9F4C-A8F38D3519BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6FF6DA30-483D-41A6-9F4C-A8F38D3519BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6FF6DA30-483D-41A6-9F4C-A8F38D3519BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6FF6DA30-483D-41A6-9F4C-A8F38D3519BB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5E655A94-5B92-47C2-BD89-D3B4505AE2A8}
+	EndGlobalSection
+EndGlobal
