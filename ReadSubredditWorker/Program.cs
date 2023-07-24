@@ -1,4 +1,4 @@
-using ReadSubredditScrapper;
+using ReadSubredditWorker;
 using System.Net.Http;
 using Microsoft.Extensions.DependencyInjection;
 using RedditScrapper.Services;

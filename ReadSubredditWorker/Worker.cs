@@ -1,7 +1,7 @@
 using RedditScrapper.Model;
 using RedditScrapper.Services;
 
-namespace ReadSubredditScrapper
+namespace ReadSubredditWorker
 {
     public class Worker : BackgroundService
     {
