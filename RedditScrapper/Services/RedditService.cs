@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
+using RedditScrapper.Interface;
 using RedditScrapper.Model;
 using RedditScrapper.Model.RedditResponses;
 
@@ -12,10 +14,11 @@ namespace RedditScrapper.Services
     public class RedditService
     {
         private readonly HttpClient _httpClient;
-
-        public RedditService(HttpClient httpClient)
+        private readonly IServiceProvider _serviceProvider;
+        public RedditService(HttpClient httpClient, IServiceProvider serviceProvider)
         {
             _httpClient = httpClient;
+            _serviceProvider = serviceProvider;
         }
 
         
@@ -52,6 +55,31 @@ namespace RedditScrapper.Services
         }
 
 
+        public async Task<bool> DownloadSubredditData(List<SubredditDownloadLink> links)
+        {
+            List<IDomainImageDownloader> downloaders = _serviceProvider.GetServices<IDomainImageDownloader>().ToList();
+
+            foreach(SubredditDownloadLink link in links) 
+            {
+                try
+                {
+                    IDomainImageDownloader? downloader = downloaders.FirstOrDefault(x => x.Id == link.domain);
+
+                    if (downloader == null)
+                        continue;
+
+                    await downloader.DownloadLinkAsync(link);
+                }
+                catch(Exception ex) 
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                
+                
+            }
+
+            return true;
+        }
         public async Task<RedditFeedResponse> ReadSubredditPage(string subredditName, string? after = null)
         {
             HttpResponseMessage response = await _httpClient.GetAsync($"/r/{subredditName}/top/.json?t=all&after={after}");
@@ -59,7 +87,6 @@ namespace RedditScrapper.Services
             string responseText = await response.Content.ReadAsStringAsync();
 
             RedditFeedResponse redditFeedResponse = JsonConvert.DeserializeObject<RedditFeedResponse>(responseText);
-
 
             return redditFeedResponse;
 

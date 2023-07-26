@@ -8,10 +8,10 @@ namespace RedditScrapper.Model.RedditResponses
 {
     public class RedditPostData
     {
-        public string subreddit;
-        public string title;
-        public string domain;
-        public string url_overridden_by_dest;
+        public string subreddit { get; set; }
+        public string title { get; set; }
+        public string domain { get; set; }
+        public string url_overridden_by_dest { get; set; }
 
     }
 }

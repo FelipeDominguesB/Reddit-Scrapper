@@ -20,7 +20,7 @@ namespace ReadSubredditWorker
                 _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
 
                 List<SubredditDownloadLink> links = await _redditService.ReadSubredditData("pics");
-                
+                await _redditService.DownloadSubredditData(links);
                 await Task.Delay(1000, stoppingToken);
             }
         }
