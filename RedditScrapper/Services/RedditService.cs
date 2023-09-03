@@ -7,11 +7,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using RedditScrapper.Interface;
 using RedditScrapper.Model;
+using RedditScrapper.Model.Enums;
 using RedditScrapper.Model.RedditResponses;
 
 namespace RedditScrapper.Services
 {
-    public class RedditService
+    public class RedditService : IRedditScrapperService
     {
         private readonly HttpClient _httpClient;
         private readonly IServiceProvider _serviceProvider;
@@ -22,14 +23,14 @@ namespace RedditScrapper.Services
         }
 
         
-        public async Task<List<SubredditDownloadLink>> ReadSubredditData(string subredditName)
+        public async Task<ICollection<SubredditDownloadLink>> ReadSubredditData(string subredditName)
         {
             List<SubredditDownloadLink> links = new List<SubredditDownloadLink>();
             int classification = 0;
 
             string? after = String.Empty;
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i <40; i++)
             {
                 RedditFeedResponse redditFeedResponse = await ReadSubredditPage(subredditName, after);
 
@@ -41,7 +42,6 @@ namespace RedditScrapper.Services
                     subredditDownloadLink.subredditName = post.data.subreddit;
                     subredditDownloadLink.url = post.data.url_overridden_by_dest;
                     subredditDownloadLink.classification = ++classification;
-
                     links.Add(subredditDownloadLink);
                 }
 
@@ -54,12 +54,42 @@ namespace RedditScrapper.Services
             return links;
         }
 
+        public Task<ICollection<SubredditDownloadLink>> ReadSubredditData(string subredditName, int postCount, SortingEnum postSorting)
+        {
+            throw new NotImplementedException();
+        }
 
-        public async Task<bool> DownloadSubredditData(List<SubredditDownloadLink> links)
+        public async Task<bool> DownloadRedditPost(SubredditDownloadLink subredditDownloadLink)
         {
             List<IDomainImageDownloader> downloaders = _serviceProvider.GetServices<IDomainImageDownloader>().ToList();
 
-            foreach(SubredditDownloadLink link in links) 
+            try
+            {
+                IDomainImageDownloader? downloader = downloaders.FirstOrDefault(x => x.Id == subredditDownloadLink.domain);
+
+                if (downloader == null)
+                    return false;
+
+                await downloader.DownloadLinkAsync(subredditDownloadLink);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
+            }
+            finally
+            {
+                Console.WriteLine("Finished downloading " + subredditDownloadLink.classification);
+            }
+            return true;
+        }
+
+        public async Task<bool> DownloadRedditPostCollection(ICollection<SubredditDownloadLink> links)
+        {
+            List<IDomainImageDownloader> downloaders = _serviceProvider.GetServices<IDomainImageDownloader>().ToList();
+
+
+            foreach (SubredditDownloadLink link in links)
             {
                 try
                 {
@@ -70,17 +100,15 @@ namespace RedditScrapper.Services
 
                     await downloader.DownloadLinkAsync(link);
                 }
-                catch(Exception ex) 
+                catch (Exception ex)
                 {
                     Console.WriteLine(ex.Message);
                 }
-                
-                
             }
 
             return true;
         }
-        public async Task<RedditFeedResponse> ReadSubredditPage(string subredditName, string? after = null)
+        private async Task<RedditFeedResponse> ReadSubredditPage(string subredditName, string? after = null)
         {
             HttpResponseMessage response = await _httpClient.GetAsync($"/r/{subredditName}/top/.json?t=all&after={after}");
 
@@ -91,5 +119,7 @@ namespace RedditScrapper.Services
             return redditFeedResponse;
 
         }
+
+       
     }
 }

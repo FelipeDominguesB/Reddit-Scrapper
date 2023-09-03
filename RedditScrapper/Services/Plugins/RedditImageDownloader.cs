@@ -7,7 +7,7 @@ using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RedditScrapper.Services
+namespace RedditScrapper.Services.Plugins
 {
     public class RedditImageDownloader : IDomainImageDownloader
     {
@@ -21,20 +21,16 @@ namespace RedditScrapper.Services
 
         public async Task<bool> DownloadLinkAsync(SubredditDownloadLink downloadObject)
         {
-
-
-
             string path = $"D:\\DUMP\\Scrapper\\{downloadObject.subredditName}";
 
-            bool exists = System.IO.Directory.Exists(path);
+            bool exists = Directory.Exists(path);
 
             if (!exists)
-                System.IO.Directory.CreateDirectory(path);
+                Directory.CreateDirectory(path);
 
             string fileName = $"{downloadObject.classification}-{downloadObject.url.Split("/").Last()}";
 
             HttpResponseMessage response = await _httpClient.GetAsync(downloadObject.url);
-
 
             using (var filestream = File.Create($"{path}\\{fileName}"))
             {

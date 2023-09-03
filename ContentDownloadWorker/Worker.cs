@@ -1,8 +1,6 @@
 using RedditScrapper.Interface;
-using RedditScrapper.Model;
-using RedditScrapper.Services;
 
-namespace ReadSubredditWorker
+namespace ContentDownloadWorker
 {
     public class Worker : BackgroundService
     {
@@ -17,18 +15,19 @@ namespace ReadSubredditWorker
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            DateTime whenToRun = DateTime.UtcNow;
-
-            while (true)
+            try
             {
-                if(DateTime.UtcNow > whenToRun)
-                {
-                    whenToRun.AddMinutes(15);
-                    _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-                    Console.WriteLine("Worker starting");
-                    await _workerService.Start();
-                }
+                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
+                await _workerService.Start();
             }
+            catch(OperationCanceledException ex)
+            {
+                _logger.LogError("Operation canceled exception. Message: " + ex.Message);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Unexpected exception. Message: " + ex.Message);
+            }   
         }
     }
 }
