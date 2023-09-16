@@ -9,6 +9,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReadSubredditWorker", "Read
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ContentDownloadWorker", "ContentDownloadWorker\ContentDownloadWorker.csproj", "{2A46D145-08C6-42D0-8E8B-A1BAFC413E4D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedditScrapper.Domain", "RedditScrapper.Domain\RedditScrapper.Domain.csproj", "{3FECBB4C-9781-4066-A271-F75201283BB6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedditScrapper.Context", "RedditScrapper.Context\RedditScrapper.Context.csproj", "{2A5C17B8-5ECC-48A0-AF38-D7EB5F91A347}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{2A46D145-08C6-42D0-8E8B-A1BAFC413E4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2A46D145-08C6-42D0-8E8B-A1BAFC413E4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2A46D145-08C6-42D0-8E8B-A1BAFC413E4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3FECBB4C-9781-4066-A271-F75201283BB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3FECBB4C-9781-4066-A271-F75201283BB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3FECBB4C-9781-4066-A271-F75201283BB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3FECBB4C-9781-4066-A271-F75201283BB6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A5C17B8-5ECC-48A0-AF38-D7EB5F91A347}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A5C17B8-5ECC-48A0-AF38-D7EB5F91A347}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A5C17B8-5ECC-48A0-AF38-D7EB5F91A347}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A5C17B8-5ECC-48A0-AF38-D7EB5F91A347}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
