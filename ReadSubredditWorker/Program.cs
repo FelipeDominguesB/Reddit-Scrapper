@@ -16,13 +16,14 @@ IHost host = Host.CreateDefaultBuilder(args)
 
         services.AddSingleton<IWorkerService, ReadSubredditWorkerService>();
         services.AddSingleton<IQueueService<SubredditDownloadLink>, SubredditPostQueueManagementService>();
-        services.AddSingleton<IRedditScrapperService, RedditService>();
+        services.AddSingleton<IRedditScrapperService, RedditScrapperService>();
+        services.AddSingleton<IRoutineService, RoutineService>();
 
         services.AddDbContext<RedditScrapperContext>(
             options => options.UseSqlServer("Server=(LocalDB)\\MSSQLLocaLdb;Database=RedditScrapper;Trusted_Connection=True;Encrypt=false;")
         );
 
-        services.AddHttpClient<IRedditScrapperService, RedditService>(client =>
+        services.AddHttpClient<IRedditScrapperService, RedditScrapperService>(client =>
         {
             client.BaseAddress = new Uri("https://www.reddit.com/");
             client.DefaultRequestHeaders.Add("User-Agent", "Felipe-PC"); 

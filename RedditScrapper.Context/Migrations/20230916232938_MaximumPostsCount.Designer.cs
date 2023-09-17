@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RedditScrapper.Context;
 
@@ -11,9 +12,10 @@ using RedditScrapper.Context;
 namespace RedditScrapper.Context.Migrations
 {
     [DbContext(typeof(RedditScrapperContext))]
-    partial class RedditScrapperContextModelSnapshot : ModelSnapshot
+    [Migration("20230916232938_MaximumPostsCount")]
+    partial class MaximumPostsCount
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,15 +38,12 @@ namespace RedditScrapper.Context.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<long>("RoutineId")
+                    b.Property<long>("routineId")
                         .HasColumnType("bigint");
-
-                    b.Property<bool>("Succeded")
-                        .HasColumnType("bit");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RoutineId");
+                    b.HasIndex("routineId");
 
                     b.ToTable("SyncHistory");
                 });
@@ -66,12 +65,6 @@ namespace RedditScrapper.Context.Migrations
                     b.Property<int>("MaxPostsPerSync")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("NextRun")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("PostSorting")
-                        .HasColumnType("int");
-
                     b.Property<string>("SubredditName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -88,7 +81,7 @@ namespace RedditScrapper.Context.Migrations
                 {
                     b.HasOne("RedditScrapper.Domain.Entities.SyncRoutine", "SyncRoutine")
                         .WithMany("SyncHistories")
-                        .HasForeignKey("RoutineId")
+                        .HasForeignKey("routineId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

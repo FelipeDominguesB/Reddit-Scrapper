@@ -11,10 +11,10 @@ namespace RedditScrapper.Model
         public string subredditName { get; set; }
         public string url { get; set; }
         public string domain { get; set; }
-
         public int classification { get; set; }
         public string title { get; set; }
 
+        public DateTime routineDate { get; set; }
 
     }
 }

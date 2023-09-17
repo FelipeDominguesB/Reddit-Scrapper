@@ -48,7 +48,7 @@ namespace RedditScrapper.Services.Plugins
                 downloadObject.url = node.Attributes["content"].Value;
             }
 
-            string path = $"D:\\DUMP\\Scrapper\\{downloadObject.subredditName}";
+            string path = $"D:\\DUMP\\Scrapper\\{downloadObject.routineDate.ToString("MM-dd")}\\{downloadObject.subredditName}";
 
             bool exists = Directory.Exists(path);
 

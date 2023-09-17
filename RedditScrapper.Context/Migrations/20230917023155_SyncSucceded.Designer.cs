@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RedditScrapper.Context;
 
@@ -11,9 +12,10 @@ using RedditScrapper.Context;
 namespace RedditScrapper.Context.Migrations
 {
     [DbContext(typeof(RedditScrapperContext))]
-    partial class RedditScrapperContextModelSnapshot : ModelSnapshot
+    [Migration("20230917023155_SyncSucceded")]
+    partial class SyncSucceded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,15 +38,15 @@ namespace RedditScrapper.Context.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<long>("RoutineId")
-                        .HasColumnType("bigint");
-
                     b.Property<bool>("Succeded")
                         .HasColumnType("bit");
 
+                    b.Property<long>("routineId")
+                        .HasColumnType("bigint");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("RoutineId");
+                    b.HasIndex("routineId");
 
                     b.ToTable("SyncHistory");
                 });
@@ -88,7 +90,7 @@ namespace RedditScrapper.Context.Migrations
                 {
                     b.HasOne("RedditScrapper.Domain.Entities.SyncRoutine", "SyncRoutine")
                         .WithMany("SyncHistories")
-                        .HasForeignKey("RoutineId")
+                        .HasForeignKey("routineId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

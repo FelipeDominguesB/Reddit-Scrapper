@@ -1,5 +1,7 @@
-﻿using RedditScrapper.Interface;
+﻿using RedditScrapper.Domain.Entities;
+using RedditScrapper.Interface;
 using RedditScrapper.Model;
+using RedditScrapper.Model.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,34 +14,52 @@ namespace RedditScrapper.Services.Workers
     {
 
         private readonly IRedditScrapperService _redditService;
+        private readonly IRoutineService _routineService;
+
         private readonly IQueueService<SubredditDownloadLink> _queueService;
 
-        public ReadSubredditWorkerService(IRedditScrapperService redditService, IQueueService<SubredditDownloadLink> queueService)
+        public ReadSubredditWorkerService(IRedditScrapperService redditService, IQueueService<SubredditDownloadLink> queueService, IRoutineService routineService)
         {
+            _routineService = routineService;
             _redditService = redditService;
             _queueService = queueService;
         }
 
         public async Task<bool> Start()
         {
-            string subredditName = "booty";
-            ICollection<SubredditDownloadLink> subredditLinks = await _redditService.ReadSubredditData(subredditName);
 
-            foreach (SubredditDownloadLink subredditDownloadLink in subredditLinks)
-            {
-                try
-                {
-                    _queueService.Publish(subredditDownloadLink);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Exception reading queue. Message: " + ex.Message);
-                    throw;
-                }
-            }
+            List<SyncRoutine> pendingRoutines = await _routineService.GetPendingRoutines();
+
+            foreach(SyncRoutine routine in pendingRoutines) 
+                await this.RunRoutine(routine);
 
             return true;
         }
+
+        private async Task RunRoutine(SyncRoutine routine)
+        {
+            bool isSuccessful = false;
+            
+            try
+            { 
+                ICollection<SubredditDownloadLink> subredditLinks = await _redditService.ReadSubredditData(routine.SubredditName, routine.MaxPostsPerSync, (SortingEnum) routine.PostSorting);
+
+                foreach (SubredditDownloadLink subredditDownloadLink in subredditLinks)
+                    _queueService.Publish(subredditDownloadLink);
+
+                isSuccessful = true;
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine("Exception reading queue. Message: " + ex.Message);
+
+            }
+            finally
+            {
+                await this._routineService.AddHistoryToRoutine(routine.Id, isSuccessful);
+            }
+        }
+
 
         public Task<bool> Stop()
         {

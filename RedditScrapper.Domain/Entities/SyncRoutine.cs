@@ -11,6 +11,9 @@ namespace RedditScrapper.Domain.Entities
     {        
         public string SubredditName { get; set; }
         public int SyncRate { get; set; }
+        public int MaxPostsPerSync { get; set; }
+        public int PostSorting { get; set; }
+        public DateTime? NextRun { get; set; }
         public ICollection<SyncHistory> SyncHistories { get; set; }
 
     }

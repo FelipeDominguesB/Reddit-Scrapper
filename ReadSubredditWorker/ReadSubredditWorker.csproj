@@ -23,7 +23,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\RedditScrapper.Context\RedditScrapper.Context.csproj" />
     <ProjectReference Include="..\RedditScrapper\RedditScrapper.csproj" />
   </ItemGroup>
 </Project>

@@ -25,7 +25,7 @@ namespace RedditScrapper.Services.Plugins
         public async Task<bool> DownloadLinkAsync(SubredditDownloadLink downloadObject)
         {
 
-            string path = $"D:\\DUMP\\Scrapper\\{downloadObject.subredditName}";
+            string path = $"D:\\DUMP\\Scrapper\\{downloadObject.routineDate.ToString("MM-dd")}\\{downloadObject.subredditName}";
             string fileName = $"{downloadObject.classification}-{downloadObject.url.Split("/").Last()}";
             string filePath = $"{path}\\{fileName}";
 
@@ -50,11 +50,16 @@ namespace RedditScrapper.Services.Plugins
                             .Where(n =>
                                 n.HasAttributes
                                 && n.Attributes.Any(x => x.Name.Contains("property"))
-                                && (n.Attributes["property"].Value == "og:video" || n.Attributes["property"].Value == "og:image"))
+                                && (n.Attributes["property"].Value == "og:video" || n.Attributes["property"].Value == "og:image")
+                                && !n.Attributes["content"].Value.Contains("?play"))
                             .FirstOrDefault();
 
-                if (node != null)
-                    downloadObject.url = node.Attributes["content"].Value;
+                if (node == null)
+                    return false;
+                
+                downloadObject.url = node.Attributes["content"].Value;
+
+                filePath = filePath.Replace(".gifv", node.Attributes["property"].Value == "og:video" ? ".mp4" : ".jpg");
             }
 
             HttpResponseMessage response = await _httpClient.GetAsync(downloadObject.url);

@@ -21,7 +21,7 @@ namespace RedditScrapper.Services.Plugins
 
         public async Task<bool> DownloadLinkAsync(SubredditDownloadLink downloadObject)
         {
-            string path = $"D:\\DUMP\\Scrapper\\{downloadObject.subredditName}";
+            string path = $"D:\\DUMP\\Scrapper\\{downloadObject.routineDate.ToString("MM-dd")}\\{downloadObject.subredditName}";
 
             bool exists = Directory.Exists(path);
 

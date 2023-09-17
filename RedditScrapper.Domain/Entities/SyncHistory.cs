@@ -9,9 +9,11 @@ namespace RedditScrapper.Domain.Entities
 {
     public class SyncHistory : BaseEntity
     {
-        public long routineId { get; set; }
+        public long RoutineId { get; set; }
 
-        [ForeignKey("routineId")]
+        public bool Succeded { get; set; }
+
+        [ForeignKey("RoutineId")]
         public virtual SyncRoutine SyncRoutine { get; set; }
 
     }

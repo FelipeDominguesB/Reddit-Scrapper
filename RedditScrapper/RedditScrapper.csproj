@@ -13,4 +13,9 @@
     <PackageReference Include="RabbitMQ.Client" Version="6.5.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\RedditScrapper.Context\RedditScrapper.Context.csproj" />
+    <ProjectReference Include="..\RedditScrapper.Domain\RedditScrapper.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
