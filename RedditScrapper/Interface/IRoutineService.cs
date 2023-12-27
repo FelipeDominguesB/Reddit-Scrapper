@@ -1,5 +1,5 @@
 ﻿using RedditScrapper.Domain.Entities;
-using RedditScrapper.Model;
+using RedditScrapper.DTOs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,11 +10,12 @@ namespace RedditScrapper.Interface
 {
     public interface IRoutineService
     {
-        public Task<List<SyncRoutine>> GetPendingRoutines();
+        public Task<ICollection<SyncRoutine>> GetRoutines();
+        public Task<ICollection<SyncRoutine>> GetPendingRoutines();
         public Task<SyncRoutine> RegisterRoutine(AddRoutineDTO addRoutineDTO);
-        public Task<SyncRoutine> UpdateRoutine(SyncRoutine syncRoutine);
-        public Task<SyncRoutine> GetRoutineHistory();
+        public Task<SyncRoutine> UpdateRoutine(UpdateRoutineDTO updateRoutineDTO);
+        public Task<ICollection<SyncHistory>> GetRoutineHistory(long routineId);
         public Task<SyncHistory> AddHistoryToRoutine(long routineId, bool successful);
-        public Task<bool> DisableRoutine(long routineId);
+        public Task DisableRoutine(long routineId);
     }
 }

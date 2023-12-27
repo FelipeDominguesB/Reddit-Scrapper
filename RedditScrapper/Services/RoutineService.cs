@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using RedditScrapper.Context;
 using RedditScrapper.Domain.Entities;
 using RedditScrapper.Interface;
-using RedditScrapper.Model;
+using RedditScrapper.DTOs;
 using RedditScrapper.Model.Enums;
 using System;
 using System.Collections.Generic;
@@ -50,19 +50,26 @@ namespace RedditScrapper.Services
             return syncHistory;
         }
 
-        public Task<bool> DisableRoutine(long routineId)
+        public Task DisableRoutine(long routineId)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<List<SyncRoutine>> GetPendingRoutines()
+        public async Task<ICollection<SyncRoutine>> GetRoutines()
+        {
+            using IServiceScope serviceProviderScope = _provider.CreateScope();
+            RedditScrapperContext dbContext = serviceProviderScope.ServiceProvider.GetRequiredService<RedditScrapperContext>();
+            return await dbContext.SyncRoutines.Where(routine => routine.IsActive).ToListAsync();
+        }
+
+        public async Task<ICollection<SyncRoutine>> GetPendingRoutines()
         {
             using IServiceScope serviceProviderScope = _provider.CreateScope();
             RedditScrapperContext dbContext = serviceProviderScope.ServiceProvider.GetRequiredService<RedditScrapperContext>();
             return await dbContext.SyncRoutines.Where(routine => routine.IsActive && routine.NextRun <= DateTime.Now).ToListAsync();
         }
 
-        public Task<SyncRoutine> GetRoutineHistory()
+        public Task<ICollection<SyncHistory>> GetRoutineHistory(long routineId)
         {
             throw new NotImplementedException();
         }
@@ -72,7 +79,7 @@ namespace RedditScrapper.Services
             throw new NotImplementedException();
         }
 
-        public Task<SyncRoutine> UpdateRoutine(SyncRoutine syncRoutine)
+        public Task<SyncRoutine> UpdateRoutine(UpdateRoutineDTO updateRoutineDTO)
         {
             throw new NotImplementedException();
         }
