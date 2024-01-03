@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using RedditScrapper.Context;
 using RedditScrapper.Domain.Entities;
-using RedditScrapper.DTOs;
+using RedditScrapper.Model.DTOs;
 using RedditScrapper.Model.Enums;
 using System;
 using System.Collections.Generic;

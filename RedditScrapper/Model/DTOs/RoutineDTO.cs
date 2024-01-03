@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RedditScrapper.DTOs
+namespace RedditScrapper.Model.DTOs
 {
-    public class UpdateRoutineDTO
+    public class RoutineDTO
     {
     }
 }

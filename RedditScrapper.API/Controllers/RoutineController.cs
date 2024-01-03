@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Cryptography.X509Certificates;
 using RedditScrapper.Domain.Entities;
 using RedditScrapper.Model;
-using RedditScrapper.DTOs;
 using RedditScrapper.Services.Routines;
+using RedditScrapper.Model.DTOs;
 
 namespace RedditScrapper.API.Controllers
 {
