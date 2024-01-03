@@ -37,7 +37,7 @@ namespace RedditScrapper.Services.Routines
                 Routine = Routine
             };
 
-            RateEnum RoutineRate = (RateEnum)Routine.SyncRate;
+            RateEnum RoutineRate = (RateEnum) Routine.SyncRate;
 
             if (isSuccessful && RoutineRate != RateEnum.Once)
                 Routine.NextRun = GetNextRunBasedOffRateEnum(RoutineRate);
@@ -74,9 +74,28 @@ namespace RedditScrapper.Services.Routines
             throw new NotImplementedException();
         }
 
-        public Task<Routine> RegisterRoutine(AddRoutineDTO addRoutineDTO)
+        public async Task<Routine> RegisterRoutine(AddRoutineDTO addRoutineDTO)
         {
-            throw new NotImplementedException();
+            using IServiceScope serviceProviderScope = _provider.CreateScope();
+            RedditScrapperContext dbContext = serviceProviderScope.ServiceProvider.GetRequiredService<RedditScrapperContext>();
+
+            Routine routine = new Routine()
+            {
+                CreationDate = DateTime.Now,
+                IsActive = true,
+                UserId = 1,
+                PostSorting = (int)addRoutineDTO.PostSorting,
+                MaxPostsPerSync = addRoutineDTO.MaxPostsPerSync,
+                SubredditName = addRoutineDTO.SubredditName,
+                NextRun = addRoutineDTO.RunImmediatly ? DateTime.Now : this.GetNextRunBasedOffRateEnum(addRoutineDTO.SyncRate),
+                SyncRate = (int)addRoutineDTO.SyncRate
+            };
+
+            dbContext.Routines.Add(routine);
+            
+            await dbContext.SaveChangesAsync();
+
+            return routine;
         }
 
         public Task<Routine> UpdateRoutine(UpdateRoutineDTO updateRoutineDTO)

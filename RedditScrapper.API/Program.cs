@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using RedditScrapper.Context;
 using RedditScrapper.Services.Routines;
 
@@ -12,6 +13,9 @@ builder.Services.AddScoped<IRoutineService, RoutineService>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddDbContext<RedditScrapperContext>(
+            options => options.UseSqlServer("Server=localhost;Database=RedditScrapper;Trusted_Connection=True;Encrypt=false;")
+        );
 
 var app = builder.Build();
 

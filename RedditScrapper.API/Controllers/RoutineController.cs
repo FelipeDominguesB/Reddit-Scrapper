@@ -8,7 +8,7 @@ using RedditScrapper.Model.DTOs;
 
 namespace RedditScrapper.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class RoutineController : ControllerBase
     {
@@ -18,25 +18,38 @@ namespace RedditScrapper.API.Controllers
         public RoutineController(IRoutineService routineService) {
             _routineService = routineService;
         }
+
+        [HttpGet]
+        [ActionName("routines")]
         public async Task<ICollection<Routine>> Get() { 
             return await _routineService.GetRoutines();
         }
-        public async Task<ICollection<RoutineHistory>> GetRoutineHistory(long routineId) { 
+
+        [HttpGet]
+        [ActionName("routine-history")]
+        public async Task<ICollection<RoutineHistory>> GetRoutineHistory(long routineId)
+        {
             return await _routineService.GetRoutineHistory(routineId);
         }
 
+        [HttpPost]
+        [ActionName("add-routine")]
         public async Task<Routine> AddRoutine(AddRoutineDTO addRoutineDTO)
         {
             Routine routine = await _routineService.RegisterRoutine(addRoutineDTO);
             return routine;
         }
 
+        [HttpPut]
+        [ActionName("update-routine")]
         public async Task<Routine> UpdateRoutine(UpdateRoutineDTO updateRoutineDTO)
         {
             Routine routine = await _routineService.UpdateRoutine(updateRoutineDTO);
             return routine;
         }
 
+        [HttpDelete]
+        [ActionName("disable-routine")]
         public async Task DisableRoutine(long routineId)
         {
             await _routineService.DisableRoutine(routineId);
