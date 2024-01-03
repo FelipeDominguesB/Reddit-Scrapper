@@ -1,11 +1,6 @@
 ﻿using RedditScrapper.Interface;
 using RedditScrapper.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using System.Text;
-using System.Threading.Tasks;
+using RedditScrapper.Model.Message;
 
 namespace RedditScrapper.Services.Plugins
 {
@@ -19,18 +14,18 @@ namespace RedditScrapper.Services.Plugins
             _httpClient = new HttpClient();
         }
 
-        public async Task<bool> DownloadLinkAsync(SubredditDownloadLink downloadObject)
+        public async Task<bool> DownloadLinkAsync(RedditPostMessage downloadObject)
         {
-            string path = $"D:\\DUMP\\Scrapper\\{downloadObject.routineDate.ToString("MM-dd")}\\{downloadObject.subredditName}";
+            string path = $"D:\\DUMP\\Scrapper\\{downloadObject.RoutineDate.ToString("MM-dd")}\\{downloadObject.SubredditName}";
 
             bool exists = Directory.Exists(path);
 
             if (!exists)
                 Directory.CreateDirectory(path);
 
-            string fileName = $"{downloadObject.classification}-{downloadObject.url.Split("/").Last()}";
+            string fileName = $"{downloadObject.Classification}-{downloadObject.Url.Split("/").Last()}";
 
-            HttpResponseMessage response = await _httpClient.GetAsync(downloadObject.url);
+            HttpResponseMessage response = await _httpClient.GetAsync(downloadObject.Url);
 
             using (var filestream = File.Create($"{path}\\{fileName}"))
             {

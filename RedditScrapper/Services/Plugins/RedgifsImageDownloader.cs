@@ -1,6 +1,8 @@
 ﻿using HtmlAgilityPack;
 using RedditScrapper.Interface;
 using RedditScrapper.Model;
+using RedditScrapper.Model.Message;
+using RedditScrapper.RedditProxy.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,14 +24,14 @@ namespace RedditScrapper.Services.Plugins
             _httpClient.DefaultRequestHeaders.Add("User-Agent", "Felipe-PC");
         }
 
-        public async Task<bool> DownloadLinkAsync(SubredditDownloadLink downloadObject)
+        public async Task<bool> DownloadLinkAsync(RedditPostMessage downloadObject)
         {
 
 
-            if (downloadObject.url.Split('.').Last().Contains("com/"))
+            if (downloadObject.Url.Split('.').Last().Contains("com/"))
             {
 
-                HttpResponseMessage pageResponse = await _httpClient.GetAsync(downloadObject.url);
+                HttpResponseMessage pageResponse = await _httpClient.GetAsync(downloadObject.Url);
                 string htmlCode = await pageResponse.Content.ReadAsStringAsync();
 
                 HtmlDocument doc = new HtmlDocument();
@@ -45,19 +47,19 @@ namespace RedditScrapper.Services.Plugins
                 if (node == null)
                     return false;
 
-                downloadObject.url = node.Attributes["content"].Value;
+                downloadObject.Url = node.Attributes["content"].Value;
             }
 
-            string path = $"D:\\DUMP\\Scrapper\\{downloadObject.routineDate.ToString("MM-dd")}\\{downloadObject.subredditName}";
+            string path = $"D:\\DUMP\\Scrapper\\{downloadObject.RoutineDate.ToString("MM-dd")}\\{downloadObject.SubredditName}";
 
             bool exists = Directory.Exists(path);
 
             if (!exists)
                 Directory.CreateDirectory(path);
 
-            string fileName = $"{downloadObject.classification}-{downloadObject.url.Split("/").Last()}";
+            string fileName = $"{downloadObject.Classification} - {downloadObject.Url.Split("/").Last()}";
 
-            HttpResponseMessage response = await _httpClient.GetAsync(downloadObject.url);
+            HttpResponseMessage response = await _httpClient.GetAsync(downloadObject.Url);
 
             if (response.Content.Headers.ContentLength == 503)
                 return false;

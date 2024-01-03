@@ -1,5 +1,5 @@
 ﻿using RedditScrapper.Interface;
-using RedditScrapper.Model;
+using RedditScrapper.Model.Message;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +10,9 @@ namespace RedditScrapper.Services.Workers
 {
     public class ContentDownloadWorkerService : IWorkerService
     {
-        private readonly IQueueService<SubredditDownloadLink> _queueService;
+        private readonly IQueueService<RedditPostMessage> _queueService;
         
-        public ContentDownloadWorkerService(IQueueService<SubredditDownloadLink> queueService)
+        public ContentDownloadWorkerService(IQueueService<RedditPostMessage> queueService)
         {
             _queueService = queueService;
         }

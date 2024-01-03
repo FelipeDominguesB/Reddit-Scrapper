@@ -1,5 +1,7 @@
 ﻿using RedditScrapper.Interface;
 using RedditScrapper.Model;
+using RedditScrapper.Model.Message;
+using RedditScrapper.RedditProxy.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace RedditScrapper.Services
 {
-    public class SubredditPostQueueManagementService : QueueManagementService<SubredditDownloadLink>
+    public class SubredditPostQueueManagementService : QueueManagementService<RedditPostMessage>
     {
         private readonly IRedditScrapperService _redditService;
 
@@ -16,12 +18,11 @@ namespace RedditScrapper.Services
         {
             _redditService = redditService;
         }
-        protected override async Task<bool> HandleValue(SubredditDownloadLink item)
+        protected override async Task<bool> HandleValue(RedditPostMessage item)
         {
-            Console.WriteLine($"Reading post {item.classification}");
+            Console.WriteLine($"Reading post {item.Classification}");
             await _redditService.DownloadRedditPost(item);
-
-            Console.WriteLine("Finished handling " + item.classification);
+            Console.WriteLine("Finished handling " + item.Classification);
             return true;
         }
     }

@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RedditScrapper.Context", "R
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RedditScrapper.API", "RedditScrapper.API\RedditScrapper.API.csproj", "{6CA2FA83-7939-4B10-924D-BA5E065E2497}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RedditScrapper.RedditClient", "RedditScrapper.RedditClient\RedditScrapper.RedditClient.csproj", "{8DEF1C2B-7BFC-4D23-9FEA-363B3F82CED5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RedditScrapper.RedditProxy", "RedditScrapper.RedditProxy\RedditScrapper.RedditProxy.csproj", "{8C4EA4D1-6CED-4358-B025-A8746FAC12C1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,10 +47,10 @@ Global
 		{6CA2FA83-7939-4B10-924D-BA5E065E2497}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6CA2FA83-7939-4B10-924D-BA5E065E2497}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6CA2FA83-7939-4B10-924D-BA5E065E2497}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8DEF1C2B-7BFC-4D23-9FEA-363B3F82CED5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8DEF1C2B-7BFC-4D23-9FEA-363B3F82CED5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8DEF1C2B-7BFC-4D23-9FEA-363B3F82CED5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8DEF1C2B-7BFC-4D23-9FEA-363B3F82CED5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C4EA4D1-6CED-4358-B025-A8746FAC12C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C4EA4D1-6CED-4358-B025-A8746FAC12C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C4EA4D1-6CED-4358-B025-A8746FAC12C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C4EA4D1-6CED-4358-B025-A8746FAC12C1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

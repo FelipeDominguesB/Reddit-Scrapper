@@ -8,42 +8,48 @@ using Newtonsoft.Json;
 using RedditScrapper.Interface;
 using RedditScrapper.Model;
 using RedditScrapper.Model.Enums;
-using RedditScrapper.Model.RedditResponses;
+using RedditScrapper.Model.Message;
+using RedditScrapper.RedditProxy;
+using RedditScrapper.RedditProxy.Model;
 
 namespace RedditScrapper.Services
 {
     public class RedditScrapperService : IRedditScrapperService
     {
         private readonly HttpClient _httpClient;
+        private readonly RedditClient _redditClient;
         private readonly IServiceProvider _serviceProvider;
-        public RedditScrapperService(HttpClient httpClient, IServiceProvider serviceProvider)
+        public RedditScrapperService(RedditClient redditClient, IServiceProvider serviceProvider)
         {
-            _httpClient = httpClient;
+            _redditClient = redditClient;
             _serviceProvider = serviceProvider;
+
         }
 
-        
-        public async Task<ICollection<SubredditDownloadLink>> ReadSubredditData(string subredditName)
+        public async Task<ICollection<RedditPostMessage>> ReadSubredditData(string subredditName)
         {
-            List<SubredditDownloadLink> links = new List<SubredditDownloadLink>();
+            List<RedditPostMessage> links = new List<RedditPostMessage>();
             int classification = 0;
             DateTime routineStartDate = DateTime.Now;
             string? after = String.Empty;
 
             for (int i = 0; i <40; i++)
             {
-                RedditFeedResponse redditFeedResponse = await ReadSubredditPage(subredditName, after);
+                RedditFeedResponse redditFeedResponse = await _redditClient.ReadSubredditPage(subredditName, after);
 
                 foreach(RedditPost post in redditFeedResponse.data.children)
                 {
-                    SubredditDownloadLink subredditDownloadLink = new SubredditDownloadLink();
-                    subredditDownloadLink.title = post.data.title;
-                    subredditDownloadLink.domain = post.data.domain;
-                    subredditDownloadLink.subredditName = post.data.subreddit;
-                    subredditDownloadLink.url = post.data.url_overridden_by_dest;
-                    subredditDownloadLink.classification = ++classification;
-                    subredditDownloadLink.routineDate = routineStartDate;
-                    links.Add(subredditDownloadLink);
+                    RedditPostMessage redditPostMessage = new RedditPostMessage();
+
+                    redditPostMessage.Title = post.data.title;
+                    redditPostMessage.Domain = post.data.domain;
+                    redditPostMessage.SubredditName = post.data.subreddit;
+                    redditPostMessage.Url = post.data.url_overridden_by_dest;
+                    redditPostMessage.Classification = ++classification;
+                    redditPostMessage.RoutineDate = routineStartDate;
+
+                    links.Add(redditPostMessage);
+
                 }
 
                 if (redditFeedResponse.data.after == null)
@@ -55,28 +61,28 @@ namespace RedditScrapper.Services
             return links;
         }
 
-        public async Task<ICollection<SubredditDownloadLink>> ReadSubredditData(string subredditName, int postCount, SortingEnum postSorting)
+        public async Task<ICollection<RedditPostMessage>> ReadSubredditData(string subredditName, int postCount, SortingEnum postSorting)
         {
-            List<SubredditDownloadLink> links = new List<SubredditDownloadLink>();
+            List<RedditPostMessage> links = new List<RedditPostMessage>();
             int classification = 0;
             DateTime routineStartDate = DateTime.Now;
             string? after = String.Empty;
 
             for (int i = 0; i < 40 && links.Count < postCount ; i++)
             {
-                RedditFeedResponse redditFeedResponse = await ReadSubredditPage(subredditName, this.GetSortingNameFromEnum(postSorting), after);
-
+                RedditFeedResponse redditFeedResponse = await _redditClient.ReadSubredditPage(subredditName, this.GetSortingNameFromEnum(postSorting), after);
                 foreach (RedditPost post in redditFeedResponse.data.children)
                 {
-                    SubredditDownloadLink subredditDownloadLink = new SubredditDownloadLink();
-                    subredditDownloadLink.title = post.data.title;
-                    subredditDownloadLink.domain = post.data.domain;
-                    subredditDownloadLink.subredditName = post.data.subreddit;
-                    subredditDownloadLink.url = post.data.url_overridden_by_dest;
-                    subredditDownloadLink.classification = ++classification;
-                    subredditDownloadLink.routineDate = routineStartDate;
+                    RedditPostMessage redditPostMessage = new RedditPostMessage();
+
+                    redditPostMessage.Title = post.data.title;
+                    redditPostMessage.Domain = post.data.domain;
+                    redditPostMessage.SubredditName = post.data.subreddit;
+                    redditPostMessage.Url = post.data.url_overridden_by_dest;
+                    redditPostMessage.Classification = ++classification;
+                    redditPostMessage.RoutineDate = routineStartDate;
                     
-                    links.Add(subredditDownloadLink);
+                    links.Add(redditPostMessage);
 
                     if (links.Count >= postCount)
                         break;
@@ -91,13 +97,13 @@ namespace RedditScrapper.Services
             return links;
         }
 
-        public async Task<bool> DownloadRedditPost(SubredditDownloadLink subredditDownloadLink)
+        public async Task<bool> DownloadRedditPost(RedditPostMessage subredditDownloadLink)
         {
             List<IDomainImageDownloader> downloaders = _serviceProvider.GetServices<IDomainImageDownloader>().ToList();
 
             try
             {
-                IDomainImageDownloader? downloader = downloaders.FirstOrDefault(x => subredditDownloadLink.domain.Contains(x.Id));
+                IDomainImageDownloader? downloader = downloaders.FirstOrDefault(x => subredditDownloadLink.Domain.Contains(x.Id));
 
                 if (downloader == null)
                     return false;
@@ -111,21 +117,21 @@ namespace RedditScrapper.Services
             }
             finally
             {
-                Console.WriteLine("Finished downloading " + subredditDownloadLink.classification);
+                Console.WriteLine("Finished downloading " + subredditDownloadLink.Classification);
             }
             return true;
         }
 
-        public async Task<bool> DownloadRedditPostCollection(ICollection<SubredditDownloadLink> links)
+        public async Task<bool> DownloadRedditPostCollection(ICollection<RedditPostMessage> links)
         {
             List<IDomainImageDownloader> downloaders = _serviceProvider.GetServices<IDomainImageDownloader>().ToList();
 
 
-            foreach (SubredditDownloadLink link in links)
+            foreach (RedditPostMessage link in links)
             {
                 try
                 {
-                    IDomainImageDownloader? downloader = downloaders.FirstOrDefault(x => x.Id == link.domain);
+                    IDomainImageDownloader? downloader = downloaders.FirstOrDefault(x => x.Id == link.Domain);
 
                     if (downloader == null)
                         continue;

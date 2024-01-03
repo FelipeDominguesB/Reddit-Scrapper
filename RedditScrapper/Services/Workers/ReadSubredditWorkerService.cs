@@ -2,6 +2,8 @@
 using RedditScrapper.Interface;
 using RedditScrapper.Model;
 using RedditScrapper.Model.Enums;
+using RedditScrapper.Model.Message;
+using RedditScrapper.RedditProxy.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,9 +18,9 @@ namespace RedditScrapper.Services.Workers
         private readonly IRedditScrapperService _redditService;
         private readonly IRoutineService _routineService;
 
-        private readonly IQueueService<SubredditDownloadLink> _queueService;
+        private readonly IQueueService<RedditPostMessage> _queueService;
 
-        public ReadSubredditWorkerService(IRedditScrapperService redditService, IQueueService<SubredditDownloadLink> queueService, IRoutineService routineService)
+        public ReadSubredditWorkerService(IRedditScrapperService redditService, IQueueService<RedditPostMessage> queueService, IRoutineService routineService)
         {
             _routineService = routineService;
             _redditService = redditService;
@@ -42,9 +44,9 @@ namespace RedditScrapper.Services.Workers
             
             try
             { 
-                ICollection<SubredditDownloadLink> subredditLinks = await _redditService.ReadSubredditData(routine.SubredditName, routine.MaxPostsPerSync, (SortingEnum) routine.PostSorting);
+                ICollection<RedditPostMessage> subredditLinks = await _redditService.ReadSubredditData(routine.SubredditName, routine.MaxPostsPerSync, (SortingEnum) routine.PostSorting);
 
-                foreach (SubredditDownloadLink subredditDownloadLink in subredditLinks)
+                foreach (RedditPostMessage subredditDownloadLink in subredditLinks)
                     _queueService.Publish(subredditDownloadLink);
 
                 isSuccessful = true;

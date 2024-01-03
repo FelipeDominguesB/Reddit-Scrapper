@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RedditScrapper.Model
+namespace RedditScrapper.RedditProxy.Model
 {
     public class SubredditDownloadLink
     {

@@ -5,6 +5,8 @@ using RedditScrapper.Services;
 using System.Net.Http;
 using RedditScrapper.Model;
 using RedditScrapper.Services.Workers;
+using RedditScrapper.Model.Message;
+using RedditScrapper.RedditProxy;
 
 IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>
@@ -15,9 +17,9 @@ IHost host = Host.CreateDefaultBuilder(args)
         services.AddSingleton<IDomainImageDownloader, ImgurImageDownloader>();
         services.AddSingleton<IDomainImageDownloader, RedgifsImageDownloader>();
         services.AddSingleton<IDomainImageDownloader, RedditImageDownloader>();
-        services.AddSingleton<IQueueService<SubredditDownloadLink>, SubredditPostQueueManagementService>();
+        services.AddSingleton<IQueueService<RedditPostMessage>, SubredditPostQueueManagementService>();
 
-        services.AddHttpClient<IRedditScrapperService, RedditScrapperService>(client =>
+        services.AddHttpClient<RedditClient>(client =>
         {
             client.BaseAddress = new Uri("https://www.reddit.com/");
             client.DefaultRequestHeaders.Add("User-Agent", "Felipe-PC");
