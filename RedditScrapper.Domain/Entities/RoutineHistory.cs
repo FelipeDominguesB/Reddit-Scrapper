@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 
 namespace RedditScrapper.Domain.Entities
 {
-    public class SyncHistory : BaseEntity
+    public class RoutineHistory : BaseEntity
     {
         public long RoutineId { get; set; }
 
         public bool Succeded { get; set; }
 
         [ForeignKey("RoutineId")]
-        public virtual SyncRoutine SyncRoutine { get; set; }
+        public virtual Routine Routine { get; set; }
 
     }
 }

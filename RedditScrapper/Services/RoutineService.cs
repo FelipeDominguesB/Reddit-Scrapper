@@ -21,33 +21,33 @@ namespace RedditScrapper.Services
             _provider = provider;
         }
 
-        public async Task<SyncHistory> AddHistoryToRoutine(long routineId, bool isSuccessful)
+        public async Task<RoutineHistory> AddHistoryToRoutine(long routineId, bool isSuccessful)
         {
             using IServiceScope serviceProviderScope = _provider.CreateScope();
             RedditScrapperContext dbContext = serviceProviderScope.ServiceProvider.GetRequiredService<RedditScrapperContext>();
             
-            SyncRoutine syncRoutine = await dbContext.SyncRoutines.FirstAsync(x => x.Id == routineId);
+            Routine Routine = await dbContext.Routines.FirstAsync(x => x.Id == routineId);
 
-            SyncHistory syncHistory = new()
+            RoutineHistory RoutineHistory = new()
             {
                 RoutineId = routineId,
                 Succeded = isSuccessful,
                 IsActive = true,
                 CreationDate = DateTime.Now,
-                SyncRoutine = syncRoutine
+                Routine = Routine
             };
 
-            RateEnum syncRoutineRate = (RateEnum)syncRoutine.SyncRate;
+            RateEnum RoutineRate = (RateEnum)Routine.SyncRate;
 
-            if (isSuccessful && syncRoutineRate != RateEnum.Once)
-                syncRoutine.NextRun = GetNextRunBasedOffRateEnum(syncRoutineRate);
+            if (isSuccessful && RoutineRate != RateEnum.Once)
+                Routine.NextRun = GetNextRunBasedOffRateEnum(RoutineRate);
 
-            if (syncRoutineRate == RateEnum.Once)
-                syncRoutine.IsActive = false;
+            if (RoutineRate == RateEnum.Once)
+                Routine.IsActive = false;
 
             await dbContext.SaveChangesAsync();
 
-            return syncHistory;
+            return RoutineHistory;
         }
 
         public Task DisableRoutine(long routineId)
@@ -55,31 +55,31 @@ namespace RedditScrapper.Services
             throw new NotImplementedException();
         }
 
-        public async Task<ICollection<SyncRoutine>> GetRoutines()
+        public async Task<ICollection<Routine>> GetRoutines()
         {
             using IServiceScope serviceProviderScope = _provider.CreateScope();
             RedditScrapperContext dbContext = serviceProviderScope.ServiceProvider.GetRequiredService<RedditScrapperContext>();
-            return await dbContext.SyncRoutines.Where(routine => routine.IsActive).ToListAsync();
+            return await dbContext.Routines.Where(routine => routine.IsActive).ToListAsync();
         }
 
-        public async Task<ICollection<SyncRoutine>> GetPendingRoutines()
+        public async Task<ICollection<Routine>> GetPendingRoutines()
         {
             using IServiceScope serviceProviderScope = _provider.CreateScope();
             RedditScrapperContext dbContext = serviceProviderScope.ServiceProvider.GetRequiredService<RedditScrapperContext>();
-            return await dbContext.SyncRoutines.Where(routine => routine.IsActive && routine.NextRun <= DateTime.Now).ToListAsync();
+            return await dbContext.Routines.Where(routine => routine.IsActive && routine.NextRun <= DateTime.Now).ToListAsync();
         }
 
-        public Task<ICollection<SyncHistory>> GetRoutineHistory(long routineId)
+        public Task<ICollection<RoutineHistory>> GetRoutineHistory(long routineId)
         {
             throw new NotImplementedException();
         }
 
-        public Task<SyncRoutine> RegisterRoutine(AddRoutineDTO addRoutineDTO)
+        public Task<Routine> RegisterRoutine(AddRoutineDTO addRoutineDTO)
         {
             throw new NotImplementedException();
         }
 
-        public Task<SyncRoutine> UpdateRoutine(UpdateRoutineDTO updateRoutineDTO)
+        public Task<Routine> UpdateRoutine(UpdateRoutineDTO updateRoutineDTO)
         {
             throw new NotImplementedException();
         }

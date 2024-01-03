@@ -18,22 +18,22 @@ namespace RedditScrapper.API.Controllers
         public RoutineController(IRoutineService routineService) {
             _routineService = routineService;
         }
-        public async Task<ICollection<SyncRoutine>> Get() { 
+        public async Task<ICollection<Routine>> Get() { 
             return await _routineService.GetRoutines();
         }
-        public async Task<ICollection<SyncHistory>> GetRoutineHistory(long routineId) { 
+        public async Task<ICollection<RoutineHistory>> GetRoutineHistory(long routineId) { 
             return await _routineService.GetRoutineHistory(routineId);
         }
 
-        public async Task<SyncRoutine> AddRoutine(AddRoutineDTO addRoutineDTO)
+        public async Task<Routine> AddRoutine(AddRoutineDTO addRoutineDTO)
         {
-            SyncRoutine routine = await _routineService.RegisterRoutine(addRoutineDTO);
+            Routine routine = await _routineService.RegisterRoutine(addRoutineDTO);
             return routine;
         }
 
-        public async Task<SyncRoutine> UpdateRoutine(UpdateRoutineDTO updateRoutineDTO)
+        public async Task<Routine> UpdateRoutine(UpdateRoutineDTO updateRoutineDTO)
         {
-            SyncRoutine routine = await _routineService.UpdateRoutine(updateRoutineDTO);
+            Routine routine = await _routineService.UpdateRoutine(updateRoutineDTO);
             return routine;
         }
 

@@ -12,8 +12,8 @@ using RedditScrapper.Context;
 namespace RedditScrapper.Context.Migrations
 {
     [DbContext(typeof(RedditScrapperContext))]
-    [Migration("20230917023155_SyncSucceded")]
-    partial class SyncSucceded
+    [Migration("20240103002459_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,34 +24,7 @@ namespace RedditScrapper.Context.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("RedditScrapper.Domain.Entities.SyncHistory", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
-
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("Succeded")
-                        .HasColumnType("bit");
-
-                    b.Property<long>("routineId")
-                        .HasColumnType("bigint");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("routineId");
-
-                    b.ToTable("SyncHistory");
-                });
-
-            modelBuilder.Entity("RedditScrapper.Domain.Entities.SyncRoutine", b =>
+            modelBuilder.Entity("RedditScrapper.Domain.Entities.Routine", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -83,23 +56,50 @@ namespace RedditScrapper.Context.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SyncRoutines");
+                    b.ToTable("Routines");
                 });
 
-            modelBuilder.Entity("RedditScrapper.Domain.Entities.SyncHistory", b =>
+            modelBuilder.Entity("RedditScrapper.Domain.Entities.RoutineHistory", b =>
                 {
-                    b.HasOne("RedditScrapper.Domain.Entities.SyncRoutine", "SyncRoutine")
-                        .WithMany("SyncHistories")
-                        .HasForeignKey("routineId")
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreationDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<long>("RoutineId")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("Succeded")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoutineId");
+
+                    b.ToTable("RoutinesHistory");
+                });
+
+            modelBuilder.Entity("RedditScrapper.Domain.Entities.RoutineHistory", b =>
+                {
+                    b.HasOne("RedditScrapper.Domain.Entities.Routine", "Routine")
+                        .WithMany("RoutineHistory")
+                        .HasForeignKey("RoutineId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("SyncRoutine");
+                    b.Navigation("Routine");
                 });
 
-            modelBuilder.Entity("RedditScrapper.Domain.Entities.SyncRoutine", b =>
+            modelBuilder.Entity("RedditScrapper.Domain.Entities.Routine", b =>
                 {
-                    b.Navigation("SyncHistories");
+                    b.Navigation("RoutineHistory");
                 });
 #pragma warning restore 612, 618
         }

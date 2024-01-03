@@ -6,9 +6,10 @@ namespace RedditScrapper.Context
     public class RedditScrapperContext : DbContext
     {
 
-        public DbSet<SyncHistory> SyncHistory { get; set; }
+        public DbSet<RoutineHistory> RoutinesHistory { get; set; }
 
-        public DbSet<SyncRoutine> SyncRoutines { get; set; }
+        public DbSet<Routine> Routines { get; set; }
+        public DbSet<User> Users { get; set; }
         public RedditScrapperContext(DbContextOptions<RedditScrapperContext> options) : base(options)
         {
 

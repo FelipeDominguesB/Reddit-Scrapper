@@ -20,7 +20,7 @@ IHost host = Host.CreateDefaultBuilder(args)
         services.AddSingleton<IRoutineService, RoutineService>();
 
         services.AddDbContext<RedditScrapperContext>(
-            options => options.UseSqlServer("Server=(LocalDB)\\MSSQLLocaLdb;Database=RedditScrapper;Trusted_Connection=True;Encrypt=false;")
+            options => options.UseSqlServer("Server=localhost;Database=RedditScrapper;Trusted_Connection=True;Encrypt=false;")
         );
 
         services.AddHttpClient<IRedditScrapperService, RedditScrapperService>(client =>

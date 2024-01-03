@@ -1,3 +1,4 @@
+using RedditScrapper.Context;
 using RedditScrapper.Interface;
 using RedditScrapper.Services;
 
@@ -12,7 +13,6 @@ builder.Services.AddScoped<IRoutineService, RoutineService>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
 
 var app = builder.Build();
 

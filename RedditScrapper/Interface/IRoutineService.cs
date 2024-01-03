@@ -10,12 +10,12 @@ namespace RedditScrapper.Interface
 {
     public interface IRoutineService
     {
-        public Task<ICollection<SyncRoutine>> GetRoutines();
-        public Task<ICollection<SyncRoutine>> GetPendingRoutines();
-        public Task<SyncRoutine> RegisterRoutine(AddRoutineDTO addRoutineDTO);
-        public Task<SyncRoutine> UpdateRoutine(UpdateRoutineDTO updateRoutineDTO);
-        public Task<ICollection<SyncHistory>> GetRoutineHistory(long routineId);
-        public Task<SyncHistory> AddHistoryToRoutine(long routineId, bool successful);
+        public Task<ICollection<Routine>> GetRoutines();
+        public Task<ICollection<Routine>> GetPendingRoutines();
+        public Task<Routine> RegisterRoutine(AddRoutineDTO addRoutineDTO);
+        public Task<Routine> UpdateRoutine(UpdateRoutineDTO updateRoutineDTO);
+        public Task<ICollection<RoutineHistory>> GetRoutineHistory(long routineId);
+        public Task<RoutineHistory> AddHistoryToRoutine(long routineId, bool successful);
         public Task DisableRoutine(long routineId);
     }
 }

@@ -28,15 +28,15 @@ namespace RedditScrapper.Services.Workers
         public async Task<bool> Start()
         {
 
-            List<SyncRoutine> pendingRoutines = await _routineService.GetPendingRoutines();
+            ICollection<Routine> pendingRoutines = await _routineService.GetPendingRoutines();
 
-            foreach(SyncRoutine routine in pendingRoutines) 
+            foreach(Routine routine in pendingRoutines) 
                 await this.RunRoutine(routine);
 
             return true;
         }
 
-        private async Task RunRoutine(SyncRoutine routine)
+        private async Task RunRoutine(Routine routine)
         {
             bool isSuccessful = false;
             
