@@ -1,6 +1,5 @@
 using RedditScrapper.Context;
-using RedditScrapper.Interface;
-using RedditScrapper.Services;
+using RedditScrapper.Services.Routines;
 
 var builder = WebApplication.CreateBuilder(args);
 

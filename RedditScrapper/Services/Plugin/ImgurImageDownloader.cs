@@ -1,5 +1,4 @@
 ﻿using HtmlAgilityPack;
-using RedditScrapper.Interface;
 using RedditScrapper.Model;
 using RedditScrapper.Model.Message;
 using System;
@@ -9,9 +8,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RedditScrapper.Services.Plugins
+namespace RedditScrapper.Services.Plugin
 {
-    public class ImgurImageDownloader : IDomainImageDownloader
+    public class ImgurImageDownloader : IDomainImageDownloaderPlugin
     {
         private readonly HttpClient _httpClient;
         public string Id { get; set; } = "i.imgur.com";

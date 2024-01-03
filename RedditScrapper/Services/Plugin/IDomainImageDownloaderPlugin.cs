@@ -6,11 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RedditScrapper.Interface
+namespace RedditScrapper.Services.Plugin
 {
-    public interface IDomainImageDownloader
+    public interface IDomainImageDownloaderPlugin
     {
-        public string Id { get; set;  }
+        public string Id { get; set; }
         Task<bool> DownloadLinkAsync(RedditPostMessage downloadObject);
     }
 }

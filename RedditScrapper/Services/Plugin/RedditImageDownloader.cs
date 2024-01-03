@@ -1,10 +1,9 @@
-﻿using RedditScrapper.Interface;
-using RedditScrapper.Model;
+﻿using RedditScrapper.Model;
 using RedditScrapper.Model.Message;
 
-namespace RedditScrapper.Services.Plugins
+namespace RedditScrapper.Services.Plugin
 {
-    public class RedditImageDownloader : IDomainImageDownloader
+    public class RedditImageDownloader : IDomainImageDownloaderPlugin
     {
         private readonly HttpClient _httpClient;
         public string Id { get; set; } = "i.redd.it";

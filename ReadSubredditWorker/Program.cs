@@ -1,15 +1,15 @@
 using ReadSubredditWorker;
 using System.Net.Http;
 using Microsoft.Extensions.DependencyInjection;
-using RedditScrapper.Services;
-using RedditScrapper.Interface;
-using RedditScrapper.Services.Plugins;
 using RedditScrapper.Model;
-using RedditScrapper.Services.Workers;
 using RedditScrapper.Context;
 using Microsoft.EntityFrameworkCore;
 using RedditScrapper.RedditProxy;
 using RedditScrapper.Model.Message;
+using RedditScrapper.Services.Worker;
+using RedditScrapper.Services.Scrapper;
+using RedditScrapper.Services.Queue;
+using RedditScrapper.Services.Routines;
 
 IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>

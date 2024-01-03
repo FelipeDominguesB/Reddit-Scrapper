@@ -1,14 +1,14 @@
-﻿using RedditScrapper.Interface;
-using RedditScrapper.Model;
+﻿using RedditScrapper.Model;
 using RedditScrapper.Model.Message;
 using RedditScrapper.RedditProxy.Model;
+using RedditScrapper.Services.Scrapper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RedditScrapper.Services
+namespace RedditScrapper.Services.Queue
 {
     public class SubredditPostQueueManagementService : QueueManagementService<RedditPostMessage>
     {

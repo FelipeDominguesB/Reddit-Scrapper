@@ -1,16 +1,18 @@
 ﻿using RedditScrapper.Domain.Entities;
-using RedditScrapper.Interface;
 using RedditScrapper.Model;
 using RedditScrapper.Model.Enums;
 using RedditScrapper.Model.Message;
 using RedditScrapper.RedditProxy.Model;
+using RedditScrapper.Services.Queue;
+using RedditScrapper.Services.Routines;
+using RedditScrapper.Services.Scrapper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RedditScrapper.Services.Workers
+namespace RedditScrapper.Services.Worker
 {
     public class ReadSubredditWorkerService : IWorkerService
     {
@@ -32,8 +34,8 @@ namespace RedditScrapper.Services.Workers
 
             ICollection<Routine> pendingRoutines = await _routineService.GetPendingRoutines();
 
-            foreach(Routine routine in pendingRoutines) 
-                await this.RunRoutine(routine);
+            foreach (Routine routine in pendingRoutines)
+                await RunRoutine(routine);
 
             return true;
         }
@@ -41,24 +43,24 @@ namespace RedditScrapper.Services.Workers
         private async Task RunRoutine(Routine routine)
         {
             bool isSuccessful = false;
-            
+
             try
-            { 
-                ICollection<RedditPostMessage> subredditLinks = await _redditService.ReadSubredditData(routine.SubredditName, routine.MaxPostsPerSync, (SortingEnum) routine.PostSorting);
+            {
+                ICollection<RedditPostMessage> subredditLinks = await _redditService.ReadSubredditData(routine.SubredditName, routine.MaxPostsPerSync, (SortingEnum)routine.PostSorting);
 
                 foreach (RedditPostMessage subredditDownloadLink in subredditLinks)
                     _queueService.Publish(subredditDownloadLink);
 
                 isSuccessful = true;
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Console.WriteLine("Exception reading queue. Message: " + ex.Message);
 
             }
             finally
             {
-                await this._routineService.AddHistoryToRoutine(routine.Id, isSuccessful);
+                await _routineService.AddHistoryToRoutine(routine.Id, isSuccessful);
             }
         }
 

@@ -2,7 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using RedditScrapper.Context;
 using RedditScrapper.Domain.Entities;
-using RedditScrapper.Interface;
 using RedditScrapper.DTOs;
 using RedditScrapper.Model.Enums;
 using System;
@@ -12,12 +11,13 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Formats.Asn1.AsnWriter;
 
-namespace RedditScrapper.Services
+namespace RedditScrapper.Services.Routines
 {
     public class RoutineService : IRoutineService
     {
         private readonly IServiceProvider _provider;
-        public RoutineService(IServiceProvider provider) {
+        public RoutineService(IServiceProvider provider)
+        {
             _provider = provider;
         }
 
@@ -25,7 +25,7 @@ namespace RedditScrapper.Services
         {
             using IServiceScope serviceProviderScope = _provider.CreateScope();
             RedditScrapperContext dbContext = serviceProviderScope.ServiceProvider.GetRequiredService<RedditScrapperContext>();
-            
+
             Routine Routine = await dbContext.Routines.FirstAsync(x => x.Id == routineId);
 
             RoutineHistory RoutineHistory = new()
@@ -89,8 +89,8 @@ namespace RedditScrapper.Services
         {
             DateTime nextRun = DateTime.Now;
 
-            
-            switch(rate)
+
+            switch (rate)
             {
                 case RateEnum.Daily:
                     nextRun = nextRun.AddDays(1); break;
@@ -102,7 +102,7 @@ namespace RedditScrapper.Services
                     nextRun = nextRun.AddYears(1); break;
                 default:
                     break;
-                
+
             }
 
             return nextRun;

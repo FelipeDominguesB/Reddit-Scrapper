@@ -1,5 +1,4 @@
 ﻿using RabbitMQ.Client;
-using RedditScrapper.Interface;
 using RedditScrapper.Model;
 using System;
 using System.Collections.Generic;
@@ -10,7 +9,7 @@ using Newtonsoft.Json;
 using RabbitMQ.Client.Events;
 using System.Diagnostics;
 
-namespace RedditScrapper.Services
+namespace RedditScrapper.Services.Queue
 {
     public abstract class QueueManagementService<TItem> : IQueueService<TItem> where TItem : class
     {
@@ -60,12 +59,12 @@ namespace RedditScrapper.Services
                 string itemBody = Encoding.UTF8.GetString(body);
 
                 TItem item = JsonConvert.DeserializeObject<TItem>(itemBody);
-                
-                
-                await this.HandleValue(item!);
-               
 
-                channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);;
+
+                await HandleValue(item!);
+
+
+                channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false); ;
 
             };
 

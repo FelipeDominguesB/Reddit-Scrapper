@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RedditScrapper.Interface
+namespace RedditScrapper.Services.Queue
 {
     public interface IQueueService<TItem> where TItem : class
     {

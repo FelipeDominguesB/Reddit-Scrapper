@@ -5,14 +5,14 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
-using RedditScrapper.Interface;
 using RedditScrapper.Model;
 using RedditScrapper.Model.Enums;
 using RedditScrapper.Model.Message;
 using RedditScrapper.RedditProxy;
 using RedditScrapper.RedditProxy.Model;
+using RedditScrapper.Services.Plugin;
 
-namespace RedditScrapper.Services
+namespace RedditScrapper.Services.Scrapper
 {
     public class RedditScrapperService : IRedditScrapperService
     {
@@ -31,13 +31,13 @@ namespace RedditScrapper.Services
             List<RedditPostMessage> links = new List<RedditPostMessage>();
             int classification = 0;
             DateTime routineStartDate = DateTime.Now;
-            string? after = String.Empty;
+            string? after = string.Empty;
 
-            for (int i = 0; i <40; i++)
+            for (int i = 0; i < 40; i++)
             {
                 RedditFeedResponse redditFeedResponse = await _redditClient.ReadSubredditPage(subredditName, after);
 
-                foreach(RedditPost post in redditFeedResponse.data.children)
+                foreach (RedditPost post in redditFeedResponse.data.children)
                 {
                     RedditPostMessage redditPostMessage = new RedditPostMessage();
 
@@ -66,11 +66,11 @@ namespace RedditScrapper.Services
             List<RedditPostMessage> links = new List<RedditPostMessage>();
             int classification = 0;
             DateTime routineStartDate = DateTime.Now;
-            string? after = String.Empty;
+            string? after = string.Empty;
 
-            for (int i = 0; i < 40 && links.Count < postCount ; i++)
+            for (int i = 0; i < 40 && links.Count < postCount; i++)
             {
-                RedditFeedResponse redditFeedResponse = await _redditClient.ReadSubredditPage(subredditName, this.GetSortingNameFromEnum(postSorting), after);
+                RedditFeedResponse redditFeedResponse = await _redditClient.ReadSubredditPage(subredditName, GetSortingNameFromEnum(postSorting), after);
                 foreach (RedditPost post in redditFeedResponse.data.children)
                 {
                     RedditPostMessage redditPostMessage = new RedditPostMessage();
@@ -81,7 +81,7 @@ namespace RedditScrapper.Services
                     redditPostMessage.Url = post.data.url_overridden_by_dest;
                     redditPostMessage.Classification = ++classification;
                     redditPostMessage.RoutineDate = routineStartDate;
-                    
+
                     links.Add(redditPostMessage);
 
                     if (links.Count >= postCount)
@@ -99,11 +99,11 @@ namespace RedditScrapper.Services
 
         public async Task<bool> DownloadRedditPost(RedditPostMessage subredditDownloadLink)
         {
-            List<IDomainImageDownloader> downloaders = _serviceProvider.GetServices<IDomainImageDownloader>().ToList();
+            List<IDomainImageDownloaderPlugin> downloaders = _serviceProvider.GetServices<IDomainImageDownloaderPlugin>().ToList();
 
             try
             {
-                IDomainImageDownloader? downloader = downloaders.FirstOrDefault(x => subredditDownloadLink.Domain.Contains(x.Id));
+                IDomainImageDownloaderPlugin? downloader = downloaders.FirstOrDefault(x => subredditDownloadLink.Domain.Contains(x.Id));
 
                 if (downloader == null)
                     return false;
@@ -124,14 +124,14 @@ namespace RedditScrapper.Services
 
         public async Task<bool> DownloadRedditPostCollection(ICollection<RedditPostMessage> links)
         {
-            List<IDomainImageDownloader> downloaders = _serviceProvider.GetServices<IDomainImageDownloader>().ToList();
+            List<IDomainImageDownloaderPlugin> downloaders = _serviceProvider.GetServices<IDomainImageDownloaderPlugin>().ToList();
 
 
             foreach (RedditPostMessage link in links)
             {
                 try
                 {
-                    IDomainImageDownloader? downloader = downloaders.FirstOrDefault(x => x.Id == link.Domain);
+                    IDomainImageDownloaderPlugin? downloader = downloaders.FirstOrDefault(x => x.Id == link.Domain);
 
                     if (downloader == null)
                         continue;
@@ -185,6 +185,6 @@ namespace RedditScrapper.Services
             return sortingName;
         }
 
-       
+
     }
 }

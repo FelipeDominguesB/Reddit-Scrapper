@@ -1,19 +1,12 @@
 ﻿using HtmlAgilityPack;
-using RedditScrapper.Interface;
 using RedditScrapper.Model;
 using RedditScrapper.Model.Message;
 using RedditScrapper.RedditProxy.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Reflection.Metadata.Ecma335;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace RedditScrapper.Services.Plugins
+
+namespace RedditScrapper.Services.Plugin
 {
-    public class RedgifsImageDownloader : IDomainImageDownloader
+    public class RedgifsImageDownloader : IDomainImageDownloaderPlugin
     {
         private readonly HttpClient _httpClient;
         public string Id { get; set; } = "redgifs.com";

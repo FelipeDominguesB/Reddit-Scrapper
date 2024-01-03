@@ -1,6 +1,6 @@
-using RedditScrapper.Interface;
 using RedditScrapper.Model;
 using RedditScrapper.Services;
+using RedditScrapper.Services.Worker;
 
 namespace ReadSubredditWorker
 {

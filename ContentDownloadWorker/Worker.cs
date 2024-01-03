@@ -1,4 +1,4 @@
-using RedditScrapper.Interface;
+using RedditScrapper.Services.Worker;
 
 namespace ContentDownloadWorker
 {

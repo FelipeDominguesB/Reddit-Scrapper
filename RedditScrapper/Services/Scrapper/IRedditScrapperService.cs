@@ -8,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RedditScrapper.Interface
+namespace RedditScrapper.Services.Scrapper
 {
     public interface IRedditScrapperService
     {

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RedditScrapper.Interface
+namespace RedditScrapper.Services.Routines
 {
     public interface IRoutineService
     {
