@@ -5,10 +5,6 @@ VisualStudioVersion = 17.4.33213.308
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RedditScrapper", "RedditScrapper\RedditScrapper.csproj", "{6FF6DA30-483D-41A6-9F4C-A8F38D3519BB}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReadSubredditWorker", "ReadSubredditWorker\ReadSubredditWorker.csproj", "{830737EA-83C7-4B26-8A10-C50545BF67CD}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ContentDownloadWorker", "ContentDownloadWorker\ContentDownloadWorker.csproj", "{2A46D145-08C6-42D0-8E8B-A1BAFC413E4D}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RedditScrapper.Domain", "RedditScrapper.Domain\RedditScrapper.Domain.csproj", "{3FECBB4C-9781-4066-A271-F75201283BB6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RedditScrapper.Context", "RedditScrapper.Context\RedditScrapper.Context.csproj", "{2A5C17B8-5ECC-48A0-AF38-D7EB5F91A347}"
@@ -16,6 +12,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RedditScrapper.API", "RedditScrapper.API\RedditScrapper.API.csproj", "{6CA2FA83-7939-4B10-924D-BA5E065E2497}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RedditScrapper.RedditProxy", "RedditScrapper.RedditProxy\RedditScrapper.RedditProxy.csproj", "{8C4EA4D1-6CED-4358-B025-A8746FAC12C1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RedditScrapper.ContentDownloadWorker", "RedditScrapper.ContentDownloadWorker\RedditScrapper.ContentDownloadWorker.csproj", "{BF15622B-DE85-4B26-9C7D-B02690B1795F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RedditScrapper.ContentFetchWorker", "RedditScrapper.ContentFetchWorker\RedditScrapper.ContentFetchWorker.csproj", "{61EB58E2-C722-44F5-8CBB-5A9D38D399C5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,14 +27,6 @@ Global
 		{6FF6DA30-483D-41A6-9F4C-A8F38D3519BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6FF6DA30-483D-41A6-9F4C-A8F38D3519BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6FF6DA30-483D-41A6-9F4C-A8F38D3519BB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{830737EA-83C7-4B26-8A10-C50545BF67CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{830737EA-83C7-4B26-8A10-C50545BF67CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{830737EA-83C7-4B26-8A10-C50545BF67CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{830737EA-83C7-4B26-8A10-C50545BF67CD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2A46D145-08C6-42D0-8E8B-A1BAFC413E4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2A46D145-08C6-42D0-8E8B-A1BAFC413E4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2A46D145-08C6-42D0-8E8B-A1BAFC413E4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2A46D145-08C6-42D0-8E8B-A1BAFC413E4D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3FECBB4C-9781-4066-A271-F75201283BB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3FECBB4C-9781-4066-A271-F75201283BB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3FECBB4C-9781-4066-A271-F75201283BB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -51,6 +43,14 @@ Global
 		{8C4EA4D1-6CED-4358-B025-A8746FAC12C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8C4EA4D1-6CED-4358-B025-A8746FAC12C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8C4EA4D1-6CED-4358-B025-A8746FAC12C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF15622B-DE85-4B26-9C7D-B02690B1795F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF15622B-DE85-4B26-9C7D-B02690B1795F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF15622B-DE85-4B26-9C7D-B02690B1795F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF15622B-DE85-4B26-9C7D-B02690B1795F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61EB58E2-C722-44F5-8CBB-5A9D38D399C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61EB58E2-C722-44F5-8CBB-5A9D38D399C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61EB58E2-C722-44F5-8CBB-5A9D38D399C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61EB58E2-C722-44F5-8CBB-5A9D38D399C5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace RedditScrapper.Services.Worker
 {
-    public class ReadSubredditWorkerService : IWorkerService
+    public class ContentFetchWorkerService : IWorkerService
     {
 
         private readonly IRedditScrapperService _redditService;
@@ -22,7 +22,7 @@ namespace RedditScrapper.Services.Worker
 
         private readonly IQueueService<RedditPostMessage> _queueService;
 
-        public ReadSubredditWorkerService(IRedditScrapperService redditService, IQueueService<RedditPostMessage> queueService, IRoutineService routineService)
+        public ContentFetchWorkerService(IRedditScrapperService redditService, IQueueService<RedditPostMessage> queueService, IRoutineService routineService)
         {
             _routineService = routineService;
             _redditService = redditService;

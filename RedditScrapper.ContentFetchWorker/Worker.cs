@@ -2,7 +2,7 @@ using RedditScrapper.Model;
 using RedditScrapper.Services;
 using RedditScrapper.Services.Worker;
 
-namespace ReadSubredditWorker
+namespace RedditScrapper.ContentFetchWorker
 {
     public class Worker : BackgroundService
     {

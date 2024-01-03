@@ -1,4 +1,4 @@
-using ContentDownloadWorker;
+using RedditScrapper.ContentDownloadWorker;
 using System.Net.Http;
 using RedditScrapper.Model;
 using RedditScrapper.Model.Message;

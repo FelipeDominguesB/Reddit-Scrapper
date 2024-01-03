@@ -1,6 +1,6 @@
 using RedditScrapper.Services.Worker;
 
-namespace ContentDownloadWorker
+namespace RedditScrapper.ContentDownloadWorker
 {
     public class Worker : BackgroundService
     {

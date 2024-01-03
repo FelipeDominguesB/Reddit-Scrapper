@@ -1,4 +1,4 @@
-using ReadSubredditWorker;
+using RedditScrapper.ContentFetchWorker;
 using System.Net.Http;
 using Microsoft.Extensions.DependencyInjection;
 using RedditScrapper.Model;
@@ -16,7 +16,7 @@ IHost host = Host.CreateDefaultBuilder(args)
     {
         services.AddHostedService<Worker>();
 
-        services.AddSingleton<IWorkerService, ReadSubredditWorkerService>();
+        services.AddSingleton<IWorkerService, ContentFetchWorkerService>();
         services.AddSingleton<IQueueService<RedditPostMessage>, SubredditPostQueueManagementService>();
         services.AddSingleton<IRedditScrapperService, RedditScrapperService>();
         services.AddSingleton<IRoutineService, RoutineService>();
