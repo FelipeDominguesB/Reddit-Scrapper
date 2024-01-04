@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RedditScrapper.Context;
 
@@ -11,9 +12,10 @@ using RedditScrapper.Context;
 namespace RedditScrapper.Context.Migrations
 {
     [DbContext(typeof(RedditScrapperContext))]
-    partial class RedditScrapperContextModelSnapshot : ModelSnapshot
+    [Migration("20240104005639_routine-execution-files")]
+    partial class routineexecutionfiles
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -86,7 +88,7 @@ namespace RedditScrapper.Context.Migrations
 
                     b.HasIndex("RoutineId");
 
-                    b.ToTable("RoutinesExecutions");
+                    b.ToTable("RoutineExecution");
                 });
 
             modelBuilder.Entity("RedditScrapper.Domain.Entities.RoutineExecutionFile", b =>
@@ -127,7 +129,7 @@ namespace RedditScrapper.Context.Migrations
 
                     b.HasIndex("ExecutionId");
 
-                    b.ToTable("RoutineExecutionsFiles");
+                    b.ToTable("RoutineExecutionFile");
                 });
 
             modelBuilder.Entity("RedditScrapper.Domain.Entities.User", b =>

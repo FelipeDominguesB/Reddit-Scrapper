@@ -21,14 +21,14 @@ namespace RedditScrapper.Services.Routines
             _provider = provider;
         }
 
-        public async Task<RoutineHistory> AddHistoryToRoutine(long routineId, bool isSuccessful)
+        public async Task<RoutineExecution> AddHistoryToRoutine(long routineId, bool isSuccessful)
         {
             using IServiceScope serviceProviderScope = _provider.CreateScope();
             RedditScrapperContext dbContext = serviceProviderScope.ServiceProvider.GetRequiredService<RedditScrapperContext>();
 
             Routine Routine = await dbContext.Routines.FirstAsync(x => x.Id == routineId);
 
-            RoutineHistory RoutineHistory = new()
+            RoutineExecution RoutineHistory = new()
             {
                 RoutineId = routineId,
                 Succeded = isSuccessful,
@@ -69,7 +69,7 @@ namespace RedditScrapper.Services.Routines
             return await dbContext.Routines.Where(routine => routine.IsActive && routine.NextRun <= DateTime.Now).ToListAsync();
         }
 
-        public Task<ICollection<RoutineHistory>> GetRoutineHistory(long routineId)
+        public Task<ICollection<RoutineExecution>> GetRoutineHistory(long routineId)
         {
             throw new NotImplementedException();
         }

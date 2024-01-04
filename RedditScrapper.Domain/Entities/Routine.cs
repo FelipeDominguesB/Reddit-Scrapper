@@ -15,7 +15,7 @@ namespace RedditScrapper.Domain.Entities
         public int MaxPostsPerSync { get; set; }
         public int PostSorting { get; set; }
         public DateTime? NextRun { get; set; }
-        public ICollection<RoutineHistory> RoutineHistory { get; set; }
+        public ICollection<RoutineExecution> RoutineHistory { get; set; }
 
         public long UserId { get; set; }
 

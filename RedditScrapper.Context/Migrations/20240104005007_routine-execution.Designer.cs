@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RedditScrapper.Context;
 
@@ -11,9 +12,10 @@ using RedditScrapper.Context;
 namespace RedditScrapper.Context.Migrations
 {
     [DbContext(typeof(RedditScrapperContext))]
-    partial class RedditScrapperContextModelSnapshot : ModelSnapshot
+    [Migration("20240104005007_routine-execution")]
+    partial class routineexecution
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -62,7 +64,7 @@ namespace RedditScrapper.Context.Migrations
                     b.ToTable("Routines");
                 });
 
-            modelBuilder.Entity("RedditScrapper.Domain.Entities.RoutineExecution", b =>
+            modelBuilder.Entity("RedditScrapper.Domain.Entities.RoutineExecutions", b =>
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
@@ -87,47 +89,6 @@ namespace RedditScrapper.Context.Migrations
                     b.HasIndex("RoutineId");
 
                     b.ToTable("RoutinesExecutions");
-                });
-
-            modelBuilder.Entity("RedditScrapper.Domain.Entities.RoutineExecutionFile", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
-
-                    b.Property<int>("Classification")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("DownloadDirectory")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<long>("ExecutionId")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("FileName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("SourceUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Succeded")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ExecutionId");
-
-                    b.ToTable("RoutineExecutionsFiles");
                 });
 
             modelBuilder.Entity("RedditScrapper.Domain.Entities.User", b =>
@@ -182,7 +143,7 @@ namespace RedditScrapper.Context.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("RedditScrapper.Domain.Entities.RoutineExecution", b =>
+            modelBuilder.Entity("RedditScrapper.Domain.Entities.RoutineExecutions", b =>
                 {
                     b.HasOne("RedditScrapper.Domain.Entities.Routine", "Routine")
                         .WithMany("RoutineHistory")
@@ -193,25 +154,9 @@ namespace RedditScrapper.Context.Migrations
                     b.Navigation("Routine");
                 });
 
-            modelBuilder.Entity("RedditScrapper.Domain.Entities.RoutineExecutionFile", b =>
-                {
-                    b.HasOne("RedditScrapper.Domain.Entities.RoutineExecution", "RoutineExecution")
-                        .WithMany("RoutineExecutionFiles")
-                        .HasForeignKey("ExecutionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("RoutineExecution");
-                });
-
             modelBuilder.Entity("RedditScrapper.Domain.Entities.Routine", b =>
                 {
                     b.Navigation("RoutineHistory");
-                });
-
-            modelBuilder.Entity("RedditScrapper.Domain.Entities.RoutineExecution", b =>
-                {
-                    b.Navigation("RoutineExecutionFiles");
                 });
 #pragma warning restore 612, 618
         }
