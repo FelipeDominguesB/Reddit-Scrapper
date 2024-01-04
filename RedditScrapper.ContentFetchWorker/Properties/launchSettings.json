@@ -1,6 +1,6 @@
 ﻿{
   "profiles": {
-    "ReadSubredditWorker": {
+    "RedditScrapper.ContentFetchWorker": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "environmentVariables": {

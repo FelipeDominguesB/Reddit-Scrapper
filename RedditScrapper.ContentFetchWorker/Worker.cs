@@ -23,11 +23,10 @@ namespace RedditScrapper.ContentFetchWorker
             {
                 if(DateTime.UtcNow > whenToRun)
                 {
-                    whenToRun.AddMinutes(15);
                     _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
                     Console.WriteLine("Worker starting");
                     await _workerService.Start();
-                    whenToRun = whenToRun.AddMinutes(15);
+                    whenToRun = whenToRun.AddMinutes(3);
                 }
             }
         }

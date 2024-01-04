@@ -1,6 +1,6 @@
 ﻿{
   "profiles": {
-    "ContentDownloadWorker": {
+    "RedditScrapper.ContentDownloadWorker" {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "environmentVariables": {

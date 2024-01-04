@@ -1,7 +1,4 @@
 using RedditScrapper.ContentFetchWorker;
-using System.Net.Http;
-using Microsoft.Extensions.DependencyInjection;
-using RedditScrapper.Model;
 using RedditScrapper.Context;
 using Microsoft.EntityFrameworkCore;
 using RedditScrapper.RedditProxy;
