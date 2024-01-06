@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using RedditScrapper.Context;
+using RedditScrapper.Mapper;
 using RedditScrapper.Services.Routines;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +17,8 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<RedditScrapperContext>(
             options => options.UseSqlServer("Server=localhost;Database=RedditScrapper;Trusted_Connection=True;Encrypt=false;")
         );
+
+builder.Services.AddAutoMapper(typeof(RoutineProfile));
 
 var app = builder.Build();
 
