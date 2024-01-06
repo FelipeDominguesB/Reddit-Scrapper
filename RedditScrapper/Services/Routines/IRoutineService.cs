@@ -16,6 +16,7 @@ namespace RedditScrapper.Services.Routines
         public Task<Routine> UpdateRoutine(UpdateRoutineDTO updateRoutineDTO);
         public Task<ICollection<RoutineExecution>> GetRoutineHistory(long routineId);
         public Task<RoutineExecution> AddHistoryToRoutine(long routineId, bool successful);
+        public Task EnableRoutine(long routineId);
         public Task DisableRoutine(long routineId);
     }
 }

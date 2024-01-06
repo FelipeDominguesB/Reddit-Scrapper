@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using RedditScrapper.Context;
 using RedditScrapper.Domain.Entities;
+using RedditScrapper.Exceptions;
 using RedditScrapper.Model.DTOs;
 using RedditScrapper.Model.Enums;
 using System;
@@ -50,11 +51,7 @@ namespace RedditScrapper.Services.Routines
             return RoutineHistory;
         }
 
-        public Task DisableRoutine(long routineId)
-        {
-            throw new NotImplementedException();
-        }
-
+        
         public async Task<ICollection<Routine>> GetRoutines()
         {
             using IServiceScope serviceProviderScope = _provider.CreateScope();
@@ -69,9 +66,14 @@ namespace RedditScrapper.Services.Routines
             return await dbContext.Routines.Where(routine => routine.IsActive && routine.NextRun <= DateTime.Now).ToListAsync();
         }
 
-        public Task<ICollection<RoutineExecution>> GetRoutineHistory(long routineId)
+        public async Task<ICollection<RoutineExecution>> GetRoutineHistory(long routineId)
         {
-            throw new NotImplementedException();
+            using IServiceScope serviceProviderScope = _provider.CreateScope();
+            RedditScrapperContext dbContext = serviceProviderScope.ServiceProvider.GetRequiredService<RedditScrapperContext>();
+
+            List<RoutineExecution> routineExecutions = await dbContext.RoutinesExecutions.AsNoTracking().Where(x => x.RoutineId == routineId).ToListAsync();
+
+            return routineExecutions;
         }
 
         public async Task<Routine> RegisterRoutine(AddRoutineDTO addRoutineDTO)
@@ -101,6 +103,34 @@ namespace RedditScrapper.Services.Routines
         public Task<Routine> UpdateRoutine(UpdateRoutineDTO updateRoutineDTO)
         {
             throw new NotImplementedException();
+        }
+
+        public async Task EnableRoutine(long routineId)
+        {
+            using IServiceScope serviceProviderScope = _provider.CreateScope();
+            RedditScrapperContext dbContext = serviceProviderScope.ServiceProvider.GetRequiredService<RedditScrapperContext>();
+            Routine? routine = await dbContext.Routines.Where(routine => routine.Id == routineId).FirstOrDefaultAsync();
+
+            if (routine == null)
+                throw new EntityNotFoundException();
+
+            routine.IsActive = true;
+
+            await dbContext.SaveChangesAsync();
+        }
+
+        public async Task DisableRoutine(long routineId)
+        {
+            using IServiceScope serviceProviderScope = _provider.CreateScope();
+            RedditScrapperContext dbContext = serviceProviderScope.ServiceProvider.GetRequiredService<RedditScrapperContext>();
+            Routine? routine = await dbContext.Routines.Where(routine => routine.Id == routineId).FirstOrDefaultAsync();
+
+            if (routine == null)
+                throw new EntityNotFoundException();
+
+            routine.IsActive = false;
+
+            await dbContext.SaveChangesAsync();
         }
 
 

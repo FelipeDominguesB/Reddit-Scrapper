@@ -48,6 +48,13 @@ namespace RedditScrapper.API.Controllers
             return routine;
         }
 
+        [HttpPut]
+        [ActionName("enable-routine")]
+        public async Task EnableRoutine(long routineId)
+        {
+            await _routineService.EnableRoutine(routineId);
+        }
+
         [HttpDelete]
         [ActionName("disable-routine")]
         public async Task DisableRoutine(long routineId)
