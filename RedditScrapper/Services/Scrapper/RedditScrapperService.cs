@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
+using RedditScrapper.Context;
 using RedditScrapper.Model;
 using RedditScrapper.Model.Enums;
 using RedditScrapper.Model.Message;
@@ -16,7 +17,6 @@ namespace RedditScrapper.Services.Scrapper
 {
     public class RedditScrapperService : IRedditScrapperService
     {
-        private readonly HttpClient _httpClient;
         private readonly RedditClient _redditClient;
         private readonly IServiceProvider _serviceProvider;
         public RedditScrapperService(RedditClient redditClient, IServiceProvider serviceProvider)
@@ -99,6 +99,8 @@ namespace RedditScrapper.Services.Scrapper
 
         public async Task<bool> DownloadRedditPost(RedditPostMessage subredditDownloadLink)
         {
+
+            bool result = false;
             List<IDomainImageDownloaderPlugin> downloaders = _serviceProvider.GetServices<IDomainImageDownloaderPlugin>().ToList();
 
             try
@@ -106,18 +108,22 @@ namespace RedditScrapper.Services.Scrapper
                 IDomainImageDownloaderPlugin? downloader = downloaders.FirstOrDefault(x => subredditDownloadLink.Domain.Contains(x.Id));
 
                 if (downloader == null)
-                    return false;
+                    throw new Exception($"Downloader not found for {subredditDownloadLink.Domain} domain");
 
-                await downloader.DownloadLinkAsync(subredditDownloadLink);
+                result = await downloader.DownloadLinkAsync(subredditDownloadLink);
+
+                if(result == false)
+                    Console.WriteLine($"Downloader failed for {subredditDownloadLink.Title} - {subredditDownloadLink.Url}");
+
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                throw;
+                result = false;
             }
             finally
             {
-                Console.WriteLine("Finished downloading " + subredditDownloadLink.Classification);
+                Console.WriteLine($"Finished download process for file {subredditDownloadLink.Title}. Succeeded: {result}");
             }
             return true;
         }

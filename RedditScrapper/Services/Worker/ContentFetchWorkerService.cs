@@ -1,5 +1,6 @@
 ﻿using RedditScrapper.Domain.Entities;
 using RedditScrapper.Model;
+using RedditScrapper.Model.DTOs;
 using RedditScrapper.Model.Enums;
 using RedditScrapper.Model.Message;
 using RedditScrapper.RedditProxy.Model;
@@ -42,11 +43,14 @@ namespace RedditScrapper.Services.Worker
 
         private async Task RunRoutine(Routine routine)
         {
-            bool isSuccessful = false;
 
+            bool isSuccessful = false;
+            int totalLinksFound = 0;
             try
             {
+                
                 ICollection<RedditPostMessage> subredditLinks = await _redditService.ReadSubredditData(routine.SubredditName, routine.MaxPostsPerSync, (SortingEnum)routine.PostSorting);
+                totalLinksFound = subredditLinks.Count;
 
                 foreach (RedditPostMessage subredditDownloadLink in subredditLinks)
                     _queueService.Publish(subredditDownloadLink);
@@ -60,7 +64,18 @@ namespace RedditScrapper.Services.Worker
             }
             finally
             {
-                await _routineService.AddHistoryToRoutine(routine.Id, isSuccessful);
+                RoutineExecutionDTO routineExecutionDTO = new RoutineExecutionDTO()
+                {
+                    Id = routine.Id,
+                    Succeded = isSuccessful,
+                    RoutineId = routine.Id,
+                    MaxPostsPerSync = routine.MaxPostsPerSync,
+                    PostSorting = routine.PostSorting,
+                    SyncRate = routine.SyncRate,
+                    TotalLinksFound = totalLinksFound
+                };
+
+                await _routineService.AddRoutineExecution(routineExecutionDTO);
             }
         }
 

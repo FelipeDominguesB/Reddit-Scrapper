@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using RedditScrapper.Context;
 using RedditScrapper.Domain.Entities;
@@ -17,30 +18,28 @@ namespace RedditScrapper.Services.Routines
     public class RoutineService : IRoutineService
     {
         private readonly IServiceProvider _provider;
-        public RoutineService(IServiceProvider provider)
+        private readonly IMapper _mapper;
+        public RoutineService(IServiceProvider provider, IMapper mapper)
         {
             _provider = provider;
+            _mapper = mapper;
         }
 
-        public async Task<RoutineExecution> AddHistoryToRoutine(long routineId, bool isSuccessful)
+        public async Task<RoutineExecutionDTO> AddRoutineExecution(RoutineExecutionDTO routineExecutionDTO)
         {
             using IServiceScope serviceProviderScope = _provider.CreateScope();
             RedditScrapperContext dbContext = serviceProviderScope.ServiceProvider.GetRequiredService<RedditScrapperContext>();
 
-            Routine Routine = await dbContext.Routines.FirstAsync(x => x.Id == routineId);
+            Routine Routine = await dbContext.Routines.FirstAsync(x => x.Id == routineExecutionDTO.RoutineId);
 
-            RoutineExecution RoutineHistory = new()
-            {
-                RoutineId = routineId,
-                Succeded = isSuccessful,
-                IsActive = true,
-                CreationDate = DateTime.Now,
-                Routine = Routine
-            };
+            RoutineExecution routineExecution = _mapper.Map<RoutineExecutionDTO, RoutineExecution>(routineExecutionDTO);
 
+            routineExecution.IsActive = true;
+            routineExecution.CreationDate = DateTime.Now;
+            
             RateEnum RoutineRate = (RateEnum) Routine.SyncRate;
 
-            if (isSuccessful && RoutineRate != RateEnum.Once)
+            if (routineExecutionDTO.Succeded && RoutineRate != RateEnum.Once)
                 Routine.NextRun = GetNextRunBasedOffRateEnum(RoutineRate);
 
             if (RoutineRate == RateEnum.Once)
@@ -48,15 +47,18 @@ namespace RedditScrapper.Services.Routines
 
             await dbContext.SaveChangesAsync();
 
-            return RoutineHistory;
+            return _mapper.Map<RoutineExecution, RoutineExecutionDTO>(routineExecution);
         }
 
         
-        public async Task<ICollection<Routine>> GetRoutines()
+        public async Task<ICollection<RoutineDTO>> GetRoutines()
         {
             using IServiceScope serviceProviderScope = _provider.CreateScope();
             RedditScrapperContext dbContext = serviceProviderScope.ServiceProvider.GetRequiredService<RedditScrapperContext>();
-            return await dbContext.Routines.Where(routine => routine.IsActive).ToListAsync();
+            
+            List<Routine> routines = await dbContext.Routines.Where(routine => routine.IsActive).ToListAsync();
+
+            return _mapper.Map<List<RoutineDTO>>(routines);
         }
 
         public async Task<ICollection<Routine>> GetPendingRoutines()
@@ -66,17 +68,17 @@ namespace RedditScrapper.Services.Routines
             return await dbContext.Routines.Where(routine => routine.IsActive && routine.NextRun <= DateTime.Now).ToListAsync();
         }
 
-        public async Task<ICollection<RoutineExecution>> GetRoutineHistory(long routineId)
+        public async Task<ICollection<RoutineExecutionDTO>> GetRoutineExecution(long routineId)
         {
             using IServiceScope serviceProviderScope = _provider.CreateScope();
             RedditScrapperContext dbContext = serviceProviderScope.ServiceProvider.GetRequiredService<RedditScrapperContext>();
 
             List<RoutineExecution> routineExecutions = await dbContext.RoutinesExecutions.AsNoTracking().Where(x => x.RoutineId == routineId).ToListAsync();
 
-            return routineExecutions;
+            return _mapper.Map<List<RoutineExecutionDTO>>(routineExecutions);
         }
 
-        public async Task<Routine> RegisterRoutine(AddRoutineDTO addRoutineDTO)
+        public async Task<RoutineDTO> RegisterRoutine(AddRoutineDTO addRoutineDTO)
         {
             using IServiceScope serviceProviderScope = _provider.CreateScope();
             RedditScrapperContext dbContext = serviceProviderScope.ServiceProvider.GetRequiredService<RedditScrapperContext>();
@@ -97,11 +99,15 @@ namespace RedditScrapper.Services.Routines
             
             await dbContext.SaveChangesAsync();
 
-            return routine;
+            return _mapper.Map<RoutineDTO>(routine);
         }
 
-        public Task<Routine> UpdateRoutine(UpdateRoutineDTO updateRoutineDTO)
+        public Task<RoutineDTO> UpdateRoutine(UpdateRoutineDTO updateRoutineDTO)
         {
+            using IServiceScope serviceProviderScope = _provider.CreateScope();
+            RedditScrapperContext dbContext = serviceProviderScope.ServiceProvider.GetRequiredService<RedditScrapperContext>();
+
+            
             throw new NotImplementedException();
         }
 
@@ -155,6 +161,26 @@ namespace RedditScrapper.Services.Routines
             }
 
             return nextRun;
+        }
+
+        public Task<ICollection<RoutineExecutionReportDTO>> GetRoutineExecutionReport(long routineExecutionId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<RoutineExecutionSummaryDTO>> GetRoutineExecutionsSummary(long routineExecutionId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<RoutineExecutionFileDTO> AddRoutineExecutionFile(RoutineExecutionFileDTO routineExecutionFileDTO)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ICollection<RoutineExecutionFileDTO>> AddRoutineExecutionFiles(ICollection<RoutineExecutionFileDTO> routineExecutionFileDTO)
+        {
+            throw new NotImplementedException();
         }
     }
 }
