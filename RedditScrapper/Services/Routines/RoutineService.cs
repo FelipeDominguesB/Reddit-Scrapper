@@ -37,13 +37,7 @@ namespace RedditScrapper.Services.Routines
             routineExecution.IsActive = true;
             routineExecution.CreationDate = DateTime.Now;
             
-            RateEnum RoutineRate = (RateEnum) Routine.SyncRate;
-
-            if (routineExecutionDTO.Succeded && RoutineRate != RateEnum.Once)
-                Routine.NextRun = GetNextRunBasedOffRateEnum(RoutineRate);
-
-            if (RoutineRate == RateEnum.Once)
-                Routine.IsActive = false;
+            Routine.RoutineExecutions.Add(routineExecution);
 
             await dbContext.SaveChangesAsync();
 
@@ -56,17 +50,21 @@ namespace RedditScrapper.Services.Routines
             RedditScrapperContext dbContext = serviceProviderScope.ServiceProvider.GetRequiredService<RedditScrapperContext>();
 
 
-            RoutineExecution? routineExecution = dbContext.RoutinesExecutions.FirstOrDefault(x => x.Id == routineExecutionDTO.Id);
+            RoutineExecution? routineExecution = dbContext.RoutinesExecutions.Include(x => x.Routine).FirstOrDefault(x => x.Id == routineExecutionDTO.Id);
 
             if (routineExecution == null)
                 throw new Exception();
 
-            routineExecution.IsActive = routineExecutionDTO.IsActive;
-            routineExecution.PostSorting = routineExecutionDTO.PostSorting;
-            routineExecution.MaxPostsPerSync = routineExecutionDTO.MaxPostsPerSync;
             routineExecution.TotalLinksFound = routineExecutionDTO.TotalLinksFound;
-            routineExecution.SyncRate = routineExecutionDTO.SyncRate;
             routineExecution.Succeded = routineExecutionDTO.Succeded;
+
+            RateEnum RoutineRate = (RateEnum)routineExecutionDTO.SyncRate;
+
+            if (routineExecutionDTO.Succeded && RoutineRate != RateEnum.Once)
+                routineExecution.Routine.NextRun = GetNextRunBasedOffRateEnum(RoutineRate);
+
+            if (RoutineRate == RateEnum.Once)
+                routineExecution.Routine.IsActive = false;
 
             await dbContext.SaveChangesAsync();
 

@@ -10,12 +10,18 @@ namespace RedditScrapper.Domain.Entities
 {
     public class Routine : BaseEntity
     {        
+
+        public Routine() 
+        { 
+            RoutineExecutions = new List<RoutineExecution>();
+        }
+
         public string SubredditName { get; set; }
         public int SyncRate { get; set; }
         public int MaxPostsPerSync { get; set; }
         public int PostSorting { get; set; }
         public DateTime? NextRun { get; set; }
-        public ICollection<RoutineExecution> RoutineHistory { get; set; }
+        public ICollection<RoutineExecution> RoutineExecutions { get; set; }
 
         public long UserId { get; set; }
 

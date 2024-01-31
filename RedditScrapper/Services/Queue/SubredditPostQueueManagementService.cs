@@ -27,13 +27,26 @@ namespace RedditScrapper.Services.Queue
         protected override async Task<bool> HandleValue(RedditPostMessage item)
         {
             Console.WriteLine($"Reading post {item.Classification}");
-            RoutineExecutionFileDTO routineExecutionFileDTO =  await _redditService.DownloadRedditPost(item);
+            RoutineExecutionFileDTO routineExecutionFileDTO;
 
-            if(routineExecutionFileDTO.Succeded)
-                await _routineService.AddRoutineExecutionFile(routineExecutionFileDTO);
+            try
+            {
+                routineExecutionFileDTO = await _redditService.DownloadRedditPost(item);
+            }
+            catch (Exception ex) {
 
-            Console.WriteLine("Finished handling " + item.Classification);
-            return true;
+                routineExecutionFileDTO = new RoutineExecutionFileDTO()
+                {
+                    Classification = item.Classification,
+                    SourceUrl = item.Url,
+                    RoutineExecutionId = item.ExecutionId,
+                    Succeded = false
+                };
+            }
+
+            await _routineService.AddRoutineExecutionFile(routineExecutionFileDTO);
+
+            return routineExecutionFileDTO.Succeded;
         }
     }
 }

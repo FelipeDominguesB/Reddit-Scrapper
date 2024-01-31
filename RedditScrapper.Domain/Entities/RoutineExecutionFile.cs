@@ -13,10 +13,10 @@ namespace RedditScrapper.Domain.Entities
         public RoutineExecutionFile() { }
 
         public long ExecutionId { get; set; }
-        public string FileName { get; set; }
+        public string? FileName { get; set; }
         public string SourceUrl { get; set; }
         public string? DownloadDirectory { get; set; }
-        public int Classification { get; set; }
+        public int? Classification { get; set; }
         public bool Succeded { get; set; }
 
         [ForeignKey("ExecutionId")]

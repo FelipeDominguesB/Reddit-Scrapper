@@ -8,6 +8,9 @@ using RedditScrapper.Services.Scrapper;
 using RedditScrapper.Services.Plugin;
 using RedditScrapper.Services.Queue;
 using RedditScrapper.Mapper;
+using RedditScrapper.Services.Routines;
+using Microsoft.EntityFrameworkCore;
+using RedditScrapper.Context;
 
 IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>
@@ -19,7 +22,13 @@ IHost host = Host.CreateDefaultBuilder(args)
         services.AddSingleton<IDomainImageDownloaderPlugin, RedgifsImageDownloader>();
         services.AddSingleton<IDomainImageDownloaderPlugin, RedditImageDownloader>();
         services.AddSingleton<IQueueService<RedditPostMessage>, SubredditPostQueueManagementService>();
+        services.AddSingleton<IRoutineService, RoutineService>();
         services.AddAutoMapper(typeof(RoutineProfile));
+
+
+        services.AddDbContext<RedditScrapperContext>(
+            options => options.UseSqlServer("Server=localhost;Database=RedditScrapper;Trusted_Connection=True;Encrypt=false;")
+        );
 
         services.AddHttpClient<RedditClient>(client =>
         {

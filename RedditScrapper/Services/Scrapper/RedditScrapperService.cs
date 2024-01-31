@@ -105,7 +105,7 @@ namespace RedditScrapper.Services.Scrapper
 
             List<IDomainImageDownloaderPlugin> downloaders = _serviceProvider.GetServices<IDomainImageDownloaderPlugin>().ToList();
 
-            IDomainImageDownloaderPlugin? downloader = downloaders.FirstOrDefault(x => subredditDownloadLink.Domain.Contains(x.Id));
+            IDomainImageDownloaderPlugin? downloader = downloaders.FirstOrDefault(x => x.Id.Contains(subredditDownloadLink.Domain));
 
             if (downloader == null)
                 throw new Exception($"Downloader not found for {subredditDownloadLink.Domain} domain");

@@ -9,6 +9,9 @@ namespace RedditScrapper.Domain.Entities
 {
     public class RoutineExecution : BaseEntity
     {
+        public RoutineExecution() { 
+            RoutineExecutionFiles = new List<RoutineExecutionFile>();
+        }
         public long RoutineId { get; set; }
         public bool Succeded { get; set; }
         public int MaxPostsPerSync { get; set; }

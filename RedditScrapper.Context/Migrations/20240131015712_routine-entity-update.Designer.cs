@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RedditScrapper.Context;
 
@@ -11,9 +12,10 @@ using RedditScrapper.Context;
 namespace RedditScrapper.Context.Migrations
 {
     [DbContext(typeof(RedditScrapperContext))]
-    partial class RedditScrapperContextModelSnapshot : ModelSnapshot
+    [Migration("20240131015712_routine-entity-update")]
+    partial class routineentityupdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -109,7 +111,7 @@ namespace RedditScrapper.Context.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"), 1L, 1);
 
-                    b.Property<int?>("Classification")
+                    b.Property<int>("Classification")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreationDate")
@@ -122,6 +124,7 @@ namespace RedditScrapper.Context.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("FileName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsActive")
