@@ -8,6 +8,7 @@ namespace RedditScrapper.Model.Message
 {
     public class RedditPostMessage
     {
+        public long ExecutionId { get; set; }
         public string SubredditName { get; set; }
         public string Url { get; set; }
         public string Domain { get; set; }

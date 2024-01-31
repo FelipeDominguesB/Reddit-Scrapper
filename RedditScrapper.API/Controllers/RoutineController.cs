@@ -21,30 +21,30 @@ namespace RedditScrapper.API.Controllers
 
         [HttpGet]
         [ActionName("routines")]
-        public async Task<ICollection<Routine>> Get() { 
+        public async Task<ICollection<RoutineDTO>> Get() { 
             return await _routineService.GetRoutines();
         }
 
         [HttpGet]
         [ActionName("routine-history")]
-        public async Task<ICollection<RoutineExecution>> GetRoutineHistory(long routineId)
+        public async Task<ICollection<RoutineExecutionDTO>> GetRoutineHistory(long routineId)
         {
-            return await _routineService.GetRoutineHistory(routineId);
+            return await _routineService.GetRoutineExecution(routineId);
         }
 
         [HttpPost]
         [ActionName("add-routine")]
-        public async Task<Routine> AddRoutine(AddRoutineDTO addRoutineDTO)
+        public async Task<RoutineDTO> AddRoutine(AddRoutineDTO addRoutineDTO)
         {
-            Routine routine = await _routineService.RegisterRoutine(addRoutineDTO);
+            RoutineDTO routine = await _routineService.RegisterRoutine(addRoutineDTO);
             return routine;
         }
 
         [HttpPut]
         [ActionName("update-routine")]
-        public async Task<Routine> UpdateRoutine(UpdateRoutineDTO updateRoutineDTO)
+        public async Task<RoutineDTO> UpdateRoutine(UpdateRoutineDTO updateRoutineDTO)
         {
-            Routine routine = await _routineService.UpdateRoutine(updateRoutineDTO);
+            RoutineDTO routine = await _routineService.UpdateRoutine(updateRoutineDTO);
             return routine;
         }
 

@@ -1,5 +1,7 @@
 ﻿using HtmlAgilityPack;
+using Microsoft.EntityFrameworkCore.Query;
 using RedditScrapper.Model;
+using RedditScrapper.Model.DTOs;
 using RedditScrapper.Model.Message;
 using System;
 using System.Collections.Generic;
@@ -22,12 +24,10 @@ namespace RedditScrapper.Services.Plugin
 
         }
 
-        public async Task<bool> DownloadLinkAsync(RedditPostMessage downloadObject)
+        public async Task<RoutineExecutionFileDTO> DownloadLinkAsync(RedditPostMessage downloadObject)
         {
-
             string path = $"D:\\DUMP\\Scrapper\\{downloadObject.RoutineDate.ToString("MM-dd")}\\{downloadObject.SubredditName}";
             string fileName = $"{downloadObject.Classification}-{downloadObject.Url.Split("/").Last()}";
-            string filePath = $"{path}\\{fileName}";
 
             bool exists = Directory.Exists(path);
 
@@ -39,7 +39,7 @@ namespace RedditScrapper.Services.Plugin
                 HttpResponseMessage pageResponse = await _httpClient.GetAsync(downloadObject.Url);
 
                 if (pageResponse.Content.Headers.ContentLength == 503)
-                    return false;
+                    throw new Exception();
 
                 string htmlCode = await pageResponse.Content.ReadAsStringAsync();
 
@@ -55,17 +55,20 @@ namespace RedditScrapper.Services.Plugin
                             .FirstOrDefault();
 
                 if (node == null)
-                    return false;
-                
+                    throw new Exception();
+
                 downloadObject.Url = node.Attributes["content"].Value;
 
-                filePath = filePath.Replace(".gifv", node.Attributes["property"].Value == "og:video" ? ".mp4" : ".jpg");
+                fileName = fileName.Replace(".gifv", node.Attributes["property"].Value == "og:video" ? ".mp4" : ".jpg");
             }
+
+            string filePath = $"{path}\\{fileName}";
+
 
             HttpResponseMessage response = await _httpClient.GetAsync(downloadObject.Url);
 
             if (response.Content.Headers.ContentLength == 503)
-                return false;
+                throw new Exception();
 
             using (var filestream = File.Create(filePath))
             {
@@ -74,7 +77,18 @@ namespace RedditScrapper.Services.Plugin
                 await stream.CopyToAsync(filestream);
             }
 
-            return true;
+
+            RoutineExecutionFileDTO result = new RoutineExecutionFileDTO()
+            {
+                Classification = downloadObject.Classification,
+                DownloadDirectory = path,
+                SourceUrl = downloadObject.Url,
+                RoutineExecutionId = downloadObject.ExecutionId,
+                FileName = fileName,
+                Succeded = true
+            };
+
+            return result;
         }
 
     }

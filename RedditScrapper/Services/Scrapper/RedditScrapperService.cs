@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using RedditScrapper.Context;
 using RedditScrapper.Model;
+using RedditScrapper.Model.DTOs;
 using RedditScrapper.Model.Enums;
 using RedditScrapper.Model.Message;
 using RedditScrapper.RedditProxy;
@@ -19,11 +20,12 @@ namespace RedditScrapper.Services.Scrapper
     {
         private readonly RedditClient _redditClient;
         private readonly IServiceProvider _serviceProvider;
-        public RedditScrapperService(RedditClient redditClient, IServiceProvider serviceProvider)
+        private readonly HttpClient _httpClient;
+        public RedditScrapperService(RedditClient redditClient, IServiceProvider serviceProvider, HttpClient httpClient)
         {
             _redditClient = redditClient;
             _serviceProvider = serviceProvider;
-
+            _httpClient = httpClient;
         }
 
         public async Task<ICollection<RedditPostMessage>> ReadSubredditData(string subredditName)
@@ -97,35 +99,18 @@ namespace RedditScrapper.Services.Scrapper
             return links;
         }
 
-        public async Task<bool> DownloadRedditPost(RedditPostMessage subredditDownloadLink)
+        public async Task<RoutineExecutionFileDTO> DownloadRedditPost(RedditPostMessage subredditDownloadLink)
         {
+            RoutineExecutionFileDTO routineExecutionFile = new RoutineExecutionFileDTO();
 
-            bool result = false;
             List<IDomainImageDownloaderPlugin> downloaders = _serviceProvider.GetServices<IDomainImageDownloaderPlugin>().ToList();
 
-            try
-            {
-                IDomainImageDownloaderPlugin? downloader = downloaders.FirstOrDefault(x => subredditDownloadLink.Domain.Contains(x.Id));
+            IDomainImageDownloaderPlugin? downloader = downloaders.FirstOrDefault(x => subredditDownloadLink.Domain.Contains(x.Id));
 
-                if (downloader == null)
-                    throw new Exception($"Downloader not found for {subredditDownloadLink.Domain} domain");
+            if (downloader == null)
+                throw new Exception($"Downloader not found for {subredditDownloadLink.Domain} domain");
 
-                result = await downloader.DownloadLinkAsync(subredditDownloadLink);
-
-                if(result == false)
-                    Console.WriteLine($"Downloader failed for {subredditDownloadLink.Title} - {subredditDownloadLink.Url}");
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                result = false;
-            }
-            finally
-            {
-                Console.WriteLine($"Finished download process for file {subredditDownloadLink.Title}. Succeeded: {result}");
-            }
-            return true;
+            return await downloader.DownloadLinkAsync(subredditDownloadLink);
         }
 
         public async Task<bool> DownloadRedditPostCollection(ICollection<RedditPostMessage> links)

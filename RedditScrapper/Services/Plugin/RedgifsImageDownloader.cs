@@ -1,5 +1,6 @@
 ﻿using HtmlAgilityPack;
 using RedditScrapper.Model;
+using RedditScrapper.Model.DTOs;
 using RedditScrapper.Model.Message;
 using RedditScrapper.RedditProxy.Model;
 
@@ -17,7 +18,7 @@ namespace RedditScrapper.Services.Plugin
             _httpClient.DefaultRequestHeaders.Add("User-Agent", "Felipe-PC");
         }
 
-        public async Task<bool> DownloadLinkAsync(RedditPostMessage downloadObject)
+        public async Task<RoutineExecutionFileDTO> DownloadLinkAsync(RedditPostMessage downloadObject)
         {
 
 
@@ -38,7 +39,7 @@ namespace RedditScrapper.Services.Plugin
                             .FirstOrDefault();
 
                 if (node == null)
-                    return false;
+                    throw new Exception();
 
                 downloadObject.Url = node.Attributes["content"].Value;
             }
@@ -55,7 +56,7 @@ namespace RedditScrapper.Services.Plugin
             HttpResponseMessage response = await _httpClient.GetAsync(downloadObject.Url);
 
             if (response.Content.Headers.ContentLength == 503)
-                return false;
+                throw new Exception();
 
             using (var filestream = File.Create($"{path}\\{fileName}"))
             {
@@ -65,7 +66,17 @@ namespace RedditScrapper.Services.Plugin
             }
 
 
-            return true;
+            RoutineExecutionFileDTO result = new RoutineExecutionFileDTO()
+            {
+                Classification = downloadObject.Classification,
+                DownloadDirectory = path,
+                SourceUrl = downloadObject.Url,
+                RoutineExecutionId = downloadObject.ExecutionId,
+                FileName = fileName,
+                Succeded = true
+            };
+
+            return result;
         }
 
 

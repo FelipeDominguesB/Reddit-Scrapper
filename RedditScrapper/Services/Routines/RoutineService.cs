@@ -50,7 +50,29 @@ namespace RedditScrapper.Services.Routines
             return _mapper.Map<RoutineExecution, RoutineExecutionDTO>(routineExecution);
         }
 
-        
+        public async Task<RoutineExecutionDTO> UpdateRoutineExecution(RoutineExecutionDTO routineExecutionDTO)
+        {
+            using IServiceScope serviceProviderScope = _provider.CreateScope();
+            RedditScrapperContext dbContext = serviceProviderScope.ServiceProvider.GetRequiredService<RedditScrapperContext>();
+
+
+            RoutineExecution? routineExecution = dbContext.RoutinesExecutions.FirstOrDefault(x => x.Id == routineExecutionDTO.Id);
+
+            if (routineExecution == null)
+                throw new Exception();
+
+            routineExecution.IsActive = routineExecutionDTO.IsActive;
+            routineExecution.PostSorting = routineExecutionDTO.PostSorting;
+            routineExecution.MaxPostsPerSync = routineExecutionDTO.MaxPostsPerSync;
+            routineExecution.TotalLinksFound = routineExecutionDTO.TotalLinksFound;
+            routineExecution.SyncRate = routineExecutionDTO.SyncRate;
+            routineExecution.Succeded = routineExecutionDTO.Succeded;
+
+            await dbContext.SaveChangesAsync();
+
+            return _mapper.Map<RoutineExecution, RoutineExecutionDTO>(routineExecution);
+        }
+
         public async Task<ICollection<RoutineDTO>> GetRoutines()
         {
             using IServiceScope serviceProviderScope = _provider.CreateScope();
@@ -173,9 +195,21 @@ namespace RedditScrapper.Services.Routines
             throw new NotImplementedException();
         }
 
-        public Task<RoutineExecutionFileDTO> AddRoutineExecutionFile(RoutineExecutionFileDTO routineExecutionFileDTO)
+        public async Task<RoutineExecutionFileDTO> AddRoutineExecutionFile(RoutineExecutionFileDTO routineExecutionFileDTO)
         {
-            throw new NotImplementedException();
+            using IServiceScope serviceProviderScope = _provider.CreateScope();
+            RedditScrapperContext dbContext = serviceProviderScope.ServiceProvider.GetRequiredService<RedditScrapperContext>();
+            RoutineExecution? routineExecution = await dbContext.RoutinesExecutions.FirstAsync(x => x.Id == routineExecutionFileDTO.RoutineExecutionId);
+
+            if (routineExecution == null)
+                throw new Exception("Routine execution not found");
+
+            RoutineExecutionFile routineExecutionFile = _mapper.Map<RoutineExecutionFile>(routineExecutionFileDTO);
+            routineExecution.RoutineExecutionFiles.Add(routineExecutionFile);
+
+            await dbContext.SaveChangesAsync();
+
+            return _mapper.Map<RoutineExecutionFileDTO>(routineExecutionFile);
         }
 
         public Task<ICollection<RoutineExecutionFileDTO>> AddRoutineExecutionFiles(ICollection<RoutineExecutionFileDTO> routineExecutionFileDTO)

@@ -7,6 +7,7 @@ using RedditScrapper.Services.Worker;
 using RedditScrapper.Services.Scrapper;
 using RedditScrapper.Services.Queue;
 using RedditScrapper.Services.Routines;
+using RedditScrapper.Mapper;
 
 IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>
@@ -17,6 +18,7 @@ IHost host = Host.CreateDefaultBuilder(args)
         services.AddSingleton<IQueueService<RedditPostMessage>, SubredditPostQueueManagementService>();
         services.AddSingleton<IRedditScrapperService, RedditScrapperService>();
         services.AddSingleton<IRoutineService, RoutineService>();
+        services.AddAutoMapper(typeof(RoutineProfile));
 
         services.AddDbContext<RedditScrapperContext>(
             options => options.UseSqlServer("Server=localhost;Database=RedditScrapper;Trusted_Connection=True;Encrypt=false;")

@@ -1,4 +1,5 @@
 ﻿using RedditScrapper.Model;
+using RedditScrapper.Model.DTOs;
 using RedditScrapper.Model.Message;
 
 namespace RedditScrapper.Services.Plugin
@@ -13,7 +14,7 @@ namespace RedditScrapper.Services.Plugin
             _httpClient = new HttpClient();
         }
 
-        public async Task<bool> DownloadLinkAsync(RedditPostMessage downloadObject)
+        public async Task<RoutineExecutionFileDTO> DownloadLinkAsync(RedditPostMessage downloadObject)
         {
             string path = $"D:\\DUMP\\Scrapper\\{downloadObject.RoutineDate.ToString("MM-dd")}\\{downloadObject.SubredditName}";
 
@@ -33,8 +34,17 @@ namespace RedditScrapper.Services.Plugin
                 stream.CopyTo(filestream);
             }
 
+            RoutineExecutionFileDTO result = new RoutineExecutionFileDTO()
+            {
+                Classification = downloadObject.Classification,
+                DownloadDirectory = path,
+                SourceUrl = downloadObject.Url,
+                RoutineExecutionId = downloadObject.ExecutionId,
+                FileName = fileName,
+                Succeded = true
+            };
 
-            return true;
+            return result;
         }
 
 

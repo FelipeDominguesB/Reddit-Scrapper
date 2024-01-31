@@ -1,4 +1,5 @@
 ﻿using RedditScrapper.Model;
+using RedditScrapper.Model.DTOs;
 using RedditScrapper.Model.Message;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,6 @@ namespace RedditScrapper.Services.Plugin
     public interface IDomainImageDownloaderPlugin
     {
         public string Id { get; set; }
-        Task<bool> DownloadLinkAsync(RedditPostMessage downloadObject);
+        Task<RoutineExecutionFileDTO> DownloadLinkAsync(RedditPostMessage downloadObject);
     }
 }

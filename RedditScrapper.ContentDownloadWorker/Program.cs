@@ -7,6 +7,7 @@ using RedditScrapper.Services.Worker;
 using RedditScrapper.Services.Scrapper;
 using RedditScrapper.Services.Plugin;
 using RedditScrapper.Services.Queue;
+using RedditScrapper.Mapper;
 
 IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>
@@ -18,6 +19,7 @@ IHost host = Host.CreateDefaultBuilder(args)
         services.AddSingleton<IDomainImageDownloaderPlugin, RedgifsImageDownloader>();
         services.AddSingleton<IDomainImageDownloaderPlugin, RedditImageDownloader>();
         services.AddSingleton<IQueueService<RedditPostMessage>, SubredditPostQueueManagementService>();
+        services.AddAutoMapper(typeof(RoutineProfile));
 
         services.AddHttpClient<RedditClient>(client =>
         {

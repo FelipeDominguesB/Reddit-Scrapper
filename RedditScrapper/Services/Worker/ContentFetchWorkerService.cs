@@ -44,39 +44,40 @@ namespace RedditScrapper.Services.Worker
         private async Task RunRoutine(Routine routine)
         {
 
-            bool isSuccessful = false;
             int totalLinksFound = 0;
             try
             {
-                
-                ICollection<RedditPostMessage> subredditLinks = await _redditService.ReadSubredditData(routine.SubredditName, routine.MaxPostsPerSync, (SortingEnum)routine.PostSorting);
-                totalLinksFound = subredditLinks.Count;
-
-                foreach (RedditPostMessage subredditDownloadLink in subredditLinks)
-                    _queueService.Publish(subredditDownloadLink);
-
-                isSuccessful = true;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Exception reading queue. Message: " + ex.Message);
-
-            }
-            finally
-            {
                 RoutineExecutionDTO routineExecutionDTO = new RoutineExecutionDTO()
                 {
-                    Id = routine.Id,
-                    Succeded = isSuccessful,
                     RoutineId = routine.Id,
                     MaxPostsPerSync = routine.MaxPostsPerSync,
                     PostSorting = routine.PostSorting,
                     SyncRate = routine.SyncRate,
-                    TotalLinksFound = totalLinksFound
                 };
 
-                await _routineService.AddRoutineExecution(routineExecutionDTO);
+                routineExecutionDTO = await _routineService.AddRoutineExecution(routineExecutionDTO);
+
+                ICollection<RedditPostMessage> subredditLinks = await _redditService.ReadSubredditData(routine.SubredditName, routine.MaxPostsPerSync, (SortingEnum)routine.PostSorting);
+                totalLinksFound = subredditLinks.Count;
+
+                foreach (RedditPostMessage subredditDownloadLink in subredditLinks)
+                {
+                    subredditDownloadLink.ExecutionId = routineExecutionDTO.Id;
+                    _queueService.Publish(subredditDownloadLink);
+                }
+
+
+                routineExecutionDTO.TotalLinksFound = totalLinksFound;
+                routineExecutionDTO.Succeded = true;
+
+                routineExecutionDTO = await _routineService.UpdateRoutineExecution(routineExecutionDTO);
+
             }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Exception reading queue. Message: " + ex.Message);
+            }
+
         }
 
 

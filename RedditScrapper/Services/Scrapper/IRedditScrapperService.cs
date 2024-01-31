@@ -1,4 +1,5 @@
 ﻿using RedditScrapper.Model;
+using RedditScrapper.Model.DTOs;
 using RedditScrapper.Model.Enums;
 using RedditScrapper.Model.Message;
 using RedditScrapper.RedditProxy.Model;
@@ -14,7 +15,7 @@ namespace RedditScrapper.Services.Scrapper
     {
         public Task<ICollection<RedditPostMessage>> ReadSubredditData(string subredditName);
         public Task<ICollection<RedditPostMessage>> ReadSubredditData(string subredditName, int postCount, SortingEnum postSorting);
-        public Task<bool> DownloadRedditPost(RedditPostMessage subredditDownloadLink);
+        public Task<RoutineExecutionFileDTO> DownloadRedditPost(RedditPostMessage subredditDownloadLink);
         public Task<bool> DownloadRedditPostCollection(ICollection<RedditPostMessage> postCollection);
     }
 }
