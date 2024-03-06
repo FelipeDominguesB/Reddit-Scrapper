@@ -39,14 +39,14 @@ namespace RedditScrapper.Services.Scrapper
             {
                 RedditFeedResponse redditFeedResponse = await _redditClient.ReadSubredditPage(subredditName, after);
 
-                foreach (RedditPost post in redditFeedResponse.data.children)
+                foreach (RedditPost post in redditFeedResponse.Data.Children)
                 {
                     RedditPostMessage redditPostMessage = new RedditPostMessage();
 
-                    redditPostMessage.Title = post.data.title;
-                    redditPostMessage.Domain = post.data.domain;
-                    redditPostMessage.SubredditName = post.data.subreddit;
-                    redditPostMessage.Url = post.data.url_overridden_by_dest;
+                    redditPostMessage.Title = post.Data.Title;
+                    redditPostMessage.Domain = post.Data.Domain;
+                    redditPostMessage.SubredditName = post.Data.Subreddit;
+                    redditPostMessage.Url = post.Data.UrlOverridenByDest;
                     redditPostMessage.Classification = ++classification;
                     redditPostMessage.RoutineDate = routineStartDate;
 
@@ -54,10 +54,10 @@ namespace RedditScrapper.Services.Scrapper
 
                 }
 
-                if (redditFeedResponse.data.after == null)
+                if (redditFeedResponse.Data.After == null)
                     break;
 
-                after = redditFeedResponse.data.after;
+                after = redditFeedResponse.Data.After;
             }
 
             return links;
@@ -73,14 +73,14 @@ namespace RedditScrapper.Services.Scrapper
             for (int i = 0; i < 40 && links.Count < postCount; i++)
             {
                 RedditFeedResponse redditFeedResponse = await _redditClient.ReadSubredditPage(subredditName, GetSortingNameFromEnum(postSorting), after);
-                foreach (RedditPost post in redditFeedResponse.data.children)
+                foreach (RedditPost post in redditFeedResponse.Data.Children)
                 {
                     RedditPostMessage redditPostMessage = new RedditPostMessage();
 
-                    redditPostMessage.Title = post.data.title;
-                    redditPostMessage.Domain = post.data.domain;
-                    redditPostMessage.SubredditName = post.data.subreddit;
-                    redditPostMessage.Url = post.data.url_overridden_by_dest;
+                    redditPostMessage.Title = post.Data.Title;
+                    redditPostMessage.Domain = post.Data.Domain;
+                    redditPostMessage.SubredditName = post.Data.Subreddit;
+                    redditPostMessage.Url = post.Data.UrlOverridenByDest;
                     redditPostMessage.Classification = ++classification;
                     redditPostMessage.RoutineDate = routineStartDate;
 
@@ -90,10 +90,10 @@ namespace RedditScrapper.Services.Scrapper
                         break;
                 }
 
-                if (redditFeedResponse.data.after == null)
+                if (redditFeedResponse.Data.After == null)
                     break;
 
-                after = redditFeedResponse.data.after;
+                after = redditFeedResponse.Data.After;
             }
 
             return links;

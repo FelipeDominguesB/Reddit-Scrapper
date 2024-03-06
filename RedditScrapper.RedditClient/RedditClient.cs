@@ -1,5 +1,5 @@
-﻿using Newtonsoft.Json;
-using RedditScrapper.RedditClient.Model;
+﻿using RedditScrapper.RedditClient.Model;
+using System.Text.Json;
 
 namespace RedditScrapper.RedditClient
 {
@@ -18,7 +18,7 @@ namespace RedditScrapper.RedditClient
 
             string responseText = await response.Content.ReadAsStringAsync();
 
-            RedditFeedResponse redditFeedResponse = JsonConvert.DeserializeObject<RedditFeedResponse>(responseText);
+            RedditFeedResponse redditFeedResponse = JsonSerializer.Deserialize<RedditFeedResponse>(responseText);
 
             return redditFeedResponse;
 
