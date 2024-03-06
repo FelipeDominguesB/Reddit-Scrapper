@@ -2,7 +2,7 @@
 using RedditScrapper.Model;
 using RedditScrapper.Model.DTOs;
 using RedditScrapper.Model.Message;
-using RedditScrapper.RedditProxy.Model;
+using RedditScrapper.RedditClient.Model;
 
 
 namespace RedditScrapper.Services.Plugin

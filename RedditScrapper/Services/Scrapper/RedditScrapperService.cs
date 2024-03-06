@@ -10,18 +10,18 @@ using RedditScrapper.Model;
 using RedditScrapper.Model.DTOs;
 using RedditScrapper.Model.Enums;
 using RedditScrapper.Model.Message;
-using RedditScrapper.RedditProxy;
-using RedditScrapper.RedditProxy.Model;
+using RedditScrapper.RedditClient;
+using RedditScrapper.RedditClient.Model;
 using RedditScrapper.Services.Plugin;
 
 namespace RedditScrapper.Services.Scrapper
 {
     public class RedditScrapperService : IRedditScrapperService
     {
-        private readonly RedditClient _redditClient;
+        private readonly RedditHttpClient _redditClient;
         private readonly IServiceProvider _serviceProvider;
         private readonly HttpClient _httpClient;
-        public RedditScrapperService(RedditClient redditClient, IServiceProvider serviceProvider, HttpClient httpClient)
+        public RedditScrapperService(RedditHttpClient redditClient, IServiceProvider serviceProvider, HttpClient httpClient)
         {
             _redditClient = redditClient;
             _serviceProvider = serviceProvider;

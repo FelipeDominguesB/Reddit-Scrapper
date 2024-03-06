@@ -2,7 +2,7 @@
 using RedditScrapper.Model;
 using RedditScrapper.Model.DTOs;
 using RedditScrapper.Model.Message;
-using RedditScrapper.RedditProxy.Model;
+using RedditScrapper.RedditClient.Model;
 using RedditScrapper.Services.Routines;
 using RedditScrapper.Services.Scrapper;
 using System;

@@ -18,7 +18,7 @@
   <ItemGroup>
     <ProjectReference Include="..\RedditScrapper.Context\RedditScrapper.Context.csproj" />
     <ProjectReference Include="..\RedditScrapper.Domain\RedditScrapper.Domain.csproj" />
-    <ProjectReference Include="..\RedditScrapper.RedditProxy\RedditScrapper.RedditProxy.csproj" />
+    <ProjectReference Include="..\RedditScrapper.RedditClient\RedditScrapper.RedditClient.csproj" />
   </ItemGroup>
 
 </Project>

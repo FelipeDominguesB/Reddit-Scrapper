@@ -1,13 +1,13 @@
 ﻿using Newtonsoft.Json;
-using RedditScrapper.RedditProxy.Model;
+using RedditScrapper.RedditClient.Model;
 
-namespace RedditScrapper.RedditProxy
+namespace RedditScrapper.RedditClient
 {
-    public class RedditClient
+    public class RedditHttpClient
     {
 
         private HttpClient _httpClient;
-        public RedditClient(HttpClient httpClient) { 
+        public RedditHttpClient(HttpClient httpClient) { 
             _httpClient = httpClient;
             
         }

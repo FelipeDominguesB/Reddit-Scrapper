@@ -2,7 +2,7 @@
 using RedditScrapper.Model.DTOs;
 using RedditScrapper.Model.Enums;
 using RedditScrapper.Model.Message;
-using RedditScrapper.RedditProxy.Model;
+using RedditScrapper.RedditClient.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;

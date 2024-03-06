@@ -2,7 +2,7 @@ using RedditScrapper.ContentDownloadWorker;
 using System.Net.Http;
 using RedditScrapper.Model;
 using RedditScrapper.Model.Message;
-using RedditScrapper.RedditProxy;
+using RedditScrapper.RedditClient;
 using RedditScrapper.Services.Worker;
 using RedditScrapper.Services.Scrapper;
 using RedditScrapper.Services.Plugin;
@@ -30,7 +30,7 @@ IHost host = Host.CreateDefaultBuilder(args)
             options => options.UseSqlServer("Server=localhost;Database=RedditScrapper;Trusted_Connection=True;Encrypt=false;")
         );
 
-        services.AddHttpClient<RedditClient>(client =>
+        services.AddHttpClient<RedditHttpClient>(client =>
         {
             client.BaseAddress = new Uri("https://www.reddit.com/");
             client.DefaultRequestHeaders.Add("User-Agent", "Felipe-PC");

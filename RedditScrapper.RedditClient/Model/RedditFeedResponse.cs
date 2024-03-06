@@ -2,15 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace RedditScrapper.RedditProxy.Model
+namespace RedditScrapper.RedditClient.Model
 {
     public class RedditFeedResponse
     {
         public RedditFeedResponse() { }
 
-        public RedditFeedData data { get; set; }
+        [JsonPropertyName("data")]
+        public RedditFeedData Data { get; set; }
 
     }
 }
