@@ -20,14 +20,15 @@ namespace RedditScrapper.Services.Worker
 
         private readonly IRedditScrapperService _redditService;
         private readonly IRoutineService _routineService;
-
+        private readonly ILogger<ContentFetchWorkerService> _logger;
         private readonly IQueueService<RedditPostMessage> _queueService;
 
-        public ContentFetchWorkerService(IRedditScrapperService redditService, IQueueService<RedditPostMessage> queueService, IRoutineService routineService)
+        public ContentFetchWorkerService(ILogger<ContentFetchWorkerService> logger, IRedditScrapperService redditService, IQueueService<RedditPostMessage> queueService, IRoutineService routineService)
         {
             _routineService = routineService;
             _redditService = redditService;
             _queueService = queueService;
+            _logger = logger;
         }
 
         public async Task<bool> Start()
