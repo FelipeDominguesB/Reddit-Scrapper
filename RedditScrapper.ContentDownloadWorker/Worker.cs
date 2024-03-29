@@ -7,10 +7,11 @@ namespace RedditScrapper.ContentDownloadWorker
         private readonly ILogger<Worker> _logger;
         private readonly IWorkerService _workerService;
 
-        public Worker(ILogger<Worker> logger, IWorkerService workerService)
+        public Worker(ILogger<Worker> logger, IWorkerService workerService, IConfiguration configuration)
         {
             _logger = logger;
             _workerService = workerService;
+            var teste = configuration.GetSection("RedditScrapper_Database_ConnectionString");
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)

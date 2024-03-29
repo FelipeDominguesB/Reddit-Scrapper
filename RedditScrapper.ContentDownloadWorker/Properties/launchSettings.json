@@ -4,7 +4,12 @@
       "commandName": "Project",
       "dotnetRunMessages": true,
       "environmentVariables": {
-        "DOTNET_ENVIRONMENT": "Development"
+        "DOTNET_ENVIRONMENT": "Development",
+        "RedditScrapper_Database_ConnectionString": "Development",
+        "RedditScrapper_RabbitMQConfiguration_Server": "",
+        "RedditScrapper_RabbitMQConfiguration_User": "",
+        "RedditScrapper_RabbitMQConfiguration_Password": "",
+        "RedditScrapper_RabbitMQConfiguration_Queue": ""
       }
     }
   }

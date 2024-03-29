@@ -1,4 +1,5 @@
-﻿using RedditScrapper.Domain.Entities;
+﻿using Microsoft.Extensions.Logging;
+using RedditScrapper.Domain.Entities;
 using RedditScrapper.Model;
 using RedditScrapper.Model.DTOs;
 using RedditScrapper.Model.Enums;

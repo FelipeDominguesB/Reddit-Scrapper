@@ -26,8 +26,8 @@ namespace RedditScrapper.API.Controllers
         }
 
         [HttpGet]
-        [ActionName("routine-history")]
-        public async Task<ICollection<RoutineExecutionDTO>> GetRoutineHistory(long routineId)
+        [ActionName("routine-executions")]
+        public async Task<ICollection<RoutineExecutionDTO>> GetRoutineExecutions(long routineId)
         {
             return await _routineService.GetRoutineExecution(routineId);
         }
