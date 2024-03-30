@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RedditScrapper.Model.DTOs
+namespace RedditScrapper.Model.DTOs.Routine
 {
     public class AddRoutineDTO
     {

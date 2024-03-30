@@ -27,7 +27,7 @@ IHost host = Host.CreateDefaultBuilder(args)
 
 
         services.AddDbContext<RedditScrapperContext>(
-            options => options.UseSqlServer("Server=localhost;Database=RedditScrapper;Trusted_Connection=True;Encrypt=false;")
+            options => options.UseSqlServer("Server=localhost;Database=RedditScrapper;Trusted_Connection=True;Encrypt=false; User Id=sa;Password=<YourStrong@Passw0rd>")
         );
 
         services.AddHttpClient<RedditHttpClient>(client =>

@@ -4,7 +4,7 @@ using System.Security.Cryptography.X509Certificates;
 using RedditScrapper.Domain.Entities;
 using RedditScrapper.Model;
 using RedditScrapper.Services.Routines;
-using RedditScrapper.Model.DTOs;
+using RedditScrapper.Model.DTOs.Routine;
 
 namespace RedditScrapper.API.Controllers
 {

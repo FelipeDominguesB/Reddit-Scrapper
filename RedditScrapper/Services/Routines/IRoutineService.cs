@@ -1,5 +1,5 @@
 ﻿using RedditScrapper.Domain.Entities;
-using RedditScrapper.Model.DTOs;
+using RedditScrapper.Model.DTOs.Routine;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using RedditScrapper.Context;
 using RedditScrapper.Model;
-using RedditScrapper.Model.DTOs;
+using RedditScrapper.Model.DTOs.Routine;
 using RedditScrapper.Model.Enums;
 using RedditScrapper.Model.Message;
 using RedditScrapper.RedditClient;

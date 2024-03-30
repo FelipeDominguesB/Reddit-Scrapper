@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Logging;
 using RedditScrapper.Domain.Entities;
 using RedditScrapper.Model;
-using RedditScrapper.Model.DTOs;
+using RedditScrapper.Model.DTOs.Routine;
 using RedditScrapper.Model.Enums;
 using RedditScrapper.Model.Message;
 using RedditScrapper.RedditClient.Model;

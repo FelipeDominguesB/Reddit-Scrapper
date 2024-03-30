@@ -1,7 +1,7 @@
 ﻿using HtmlAgilityPack;
 using Microsoft.EntityFrameworkCore.Query;
 using RedditScrapper.Model;
-using RedditScrapper.Model.DTOs;
+using RedditScrapper.Model.DTOs.Routine;
 using RedditScrapper.Model.Message;
 using System;
 using System.Collections.Generic;

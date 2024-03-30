@@ -1,6 +1,6 @@
 ﻿using RedditScrapper.Context;
 using RedditScrapper.Model;
-using RedditScrapper.Model.DTOs;
+using RedditScrapper.Model.DTOs.Routine;
 using RedditScrapper.Model.Message;
 using RedditScrapper.RedditClient.Model;
 using RedditScrapper.Services.Routines;
