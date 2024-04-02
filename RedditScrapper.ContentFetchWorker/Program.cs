@@ -21,7 +21,7 @@ IHost host = Host.CreateDefaultBuilder(args)
         services.AddAutoMapper(typeof(RoutineProfile));
 
         services.AddDbContext<RedditScrapperContext>(
-            options => options.UseSqlServer("Server=localhost;Database=RedditScrapper;Trusted_Connection=False;Encrypt=false; User Id=sa;Password=<YourStrong@Passw0rd>")
+            options => options.UseSqlServer("Server=localhost;Database=RedditScrapper;Trusted_Connection=False;Encrypt=false; User Id=sa;Password=Pass@word1")
         );
 
         services.AddHttpClient<RedditHttpClient>(client =>

@@ -16,7 +16,7 @@ builder.Services.AddScoped<DatabaseHealthService>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<RedditScrapperContext>(options => options.UseSqlServer("Server=localhost;Database=RedditScrapper;Trusted_Connection=False;Encrypt=false; User Id=sa;Password=<YourStrong@Passw0rd>"));
+builder.Services.AddDbContext<RedditScrapperContext>(options => options.UseSqlServer("Server=localhost;Database=RedditScrapper;Trusted_Connection=False;Encrypt=false; User Id=sa;Password=Pass@word1"));
 
 builder.Services.AddAutoMapper(typeof(RoutineProfile));
 

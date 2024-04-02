@@ -11,7 +11,6 @@ namespace RedditScrapper.ContentDownloadWorker
         {
             _logger = logger;
             _workerService = workerService;
-            var teste = configuration.GetSection("RedditScrapper_Database_ConnectionString");
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
