@@ -8,19 +8,27 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using RabbitMQ.Client.Events;
 using System.Diagnostics;
+using Microsoft.Extensions.Configuration;
+using RedditScrapper.Configuration;
 
 namespace RedditScrapper.Services.Queue
 {
     public abstract class QueueManagementService<TItem> : IQueueService<TItem> where TItem : class
     {
+        private readonly RabbitMQConfiguration rabbitMQConfiguration;        
+        public QueueManagementService(IConfiguration configuration) 
+        {
+            rabbitMQConfiguration = configuration.GetSection("RabbitMQConfiguration").Get<RabbitMQConfiguration>();
+        }
+
         public void Publish(TItem item)
         {
-            ConnectionFactory connectionFactory = new ConnectionFactory() { HostName = "localhost" };
+            ConnectionFactory connectionFactory = new ConnectionFactory() { HostName = rabbitMQConfiguration.HostName };
             using IConnection connection = connectionFactory.CreateConnection();
             using IModel channel = connection.CreateModel();
 
 
-            channel.QueueDeclare(queue: "item_queue",
+            channel.QueueDeclare(queue: rabbitMQConfiguration.QueueName,
                                     durable: true,
                                     exclusive: false,
                                     autoDelete: false,
@@ -32,19 +40,19 @@ namespace RedditScrapper.Services.Queue
             var properties = channel.CreateBasicProperties();
             properties.Persistent = true;
 
-            channel.BasicPublish(exchange: string.Empty, routingKey: "item_queue", basicProperties: properties, body: body);
+            channel.BasicPublish(exchange: string.Empty, routingKey: rabbitMQConfiguration.QueueName, basicProperties: properties, body: body);
         }
 
         public void Read()
         {
-            ConnectionFactory connectionFactory = new ConnectionFactory() { HostName = "localhost" };
+            ConnectionFactory connectionFactory = new ConnectionFactory() { HostName = rabbitMQConfiguration.HostName };
             connectionFactory.DispatchConsumersAsync = true;
 
             IConnection connection = connectionFactory.CreateConnection();
             IModel channel = connection.CreateModel();
 
 
-            channel.QueueDeclare(queue: "item_queue",
+            channel.QueueDeclare(queue: rabbitMQConfiguration.QueueName,
                                  durable: true,
                                  exclusive: false,
                                  autoDelete: false,
@@ -68,7 +76,7 @@ namespace RedditScrapper.Services.Queue
 
             };
 
-            channel.BasicConsume(queue: "item_queue", autoAck: false, consumer: consumer);
+            channel.BasicConsume(queue: rabbitMQConfiguration.QueueName, autoAck: false, consumer: consumer);
         }
 
 

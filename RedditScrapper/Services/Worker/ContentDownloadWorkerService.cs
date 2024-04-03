@@ -17,7 +17,7 @@ namespace RedditScrapper.Services.Worker
             _queueService = queueService;
         }
 
-        public async Task<bool> Start()
+        public async Task Start()
         {
             try
             {
@@ -27,12 +27,8 @@ namespace RedditScrapper.Services.Worker
             {
                 Console.WriteLine("Exception reading queue. Message: " + ex.Message);
             }
-            return true;
         }
 
-        public Task<bool> Stop()
-        {
-            throw new NotImplementedException();
-        }
+
     }
 }

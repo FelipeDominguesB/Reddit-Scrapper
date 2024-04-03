@@ -8,8 +8,7 @@ namespace RedditScrapper.Services.Worker
 {
     public interface IWorkerService
     {
-        public Task<bool> Start();
-        public Task<bool> Stop();
+        public Task Start();
 
     }
 }

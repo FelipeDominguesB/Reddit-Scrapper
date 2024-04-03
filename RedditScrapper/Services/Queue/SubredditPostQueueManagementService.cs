@@ -1,4 +1,6 @@
-﻿using RedditScrapper.Context;
+﻿using Microsoft.Extensions.Configuration;
+using RedditScrapper.Configuration;
+using RedditScrapper.Context;
 using RedditScrapper.Model;
 using RedditScrapper.Model.DTOs.Routine;
 using RedditScrapper.Model.Message;
@@ -10,7 +12,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
 namespace RedditScrapper.Services.Queue
 {
     public class SubredditPostQueueManagementService : QueueManagementService<RedditPostMessage>
@@ -18,7 +19,7 @@ namespace RedditScrapper.Services.Queue
         private readonly IRedditScrapperService _redditService;
         private readonly IRoutineService _routineService;
 
-        public SubredditPostQueueManagementService(IRedditScrapperService redditService, IRoutineService routineService)
+        public SubredditPostQueueManagementService(IRedditScrapperService redditService, IRoutineService routineService, IConfiguration configuration) : base(configuration)
         {
             _redditService = redditService;
             _routineService = routineService;
@@ -26,7 +27,6 @@ namespace RedditScrapper.Services.Queue
 
         protected override async Task<bool> HandleValue(RedditPostMessage item)
         {
-            Console.WriteLine($"Reading post {item.Classification}");
             RoutineExecutionFileDTO routineExecutionFileDTO;
 
             try

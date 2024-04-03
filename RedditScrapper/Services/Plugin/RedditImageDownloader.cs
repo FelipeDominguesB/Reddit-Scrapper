@@ -1,4 +1,5 @@
-﻿using RedditScrapper.Model;
+﻿using Microsoft.Extensions.Configuration;
+using RedditScrapper.Model;
 using RedditScrapper.Model.DTOs.Routine;
 using RedditScrapper.Model.Message;
 
@@ -7,17 +8,18 @@ namespace RedditScrapper.Services.Plugin
     public class RedditImageDownloader : IDomainImageDownloaderPlugin
     {
         private readonly HttpClient _httpClient;
+        private readonly string basePath;
         public string Id { get; set; } = "i.redd.it";
 
-        public RedditImageDownloader()
+        public RedditImageDownloader(IConfiguration configuration)
         {
             _httpClient = new HttpClient();
+            basePath = configuration.GetSection("DOWNLOADPATH").Value;
         }
 
         public async Task<RoutineExecutionFileDTO> DownloadLinkAsync(RedditPostMessage downloadObject)
         {
-            string path = $"D:\\DUMP\\Scrapper\\{downloadObject.RoutineDate.ToString("MM-dd")}\\{downloadObject.SubredditName}";
-
+            string path = $"{basePath}\\{downloadObject.RoutineDate.ToString("MM-dd")}\\{downloadObject.SubredditName}";
             bool exists = Directory.Exists(path);
 
             if (!exists)

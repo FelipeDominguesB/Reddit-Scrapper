@@ -1,5 +1,6 @@
 ﻿using HtmlAgilityPack;
 using Microsoft.EntityFrameworkCore.Query;
+using Microsoft.Extensions.Configuration;
 using RedditScrapper.Model;
 using RedditScrapper.Model.DTOs.Routine;
 using RedditScrapper.Model.Message;
@@ -15,18 +16,20 @@ namespace RedditScrapper.Services.Plugin
     public class ImgurImageDownloader : IDomainImageDownloaderPlugin
     {
         private readonly HttpClient _httpClient;
+        private readonly string basePath;
         public string Id { get; set; } = "i.imgur.com";
 
-        public ImgurImageDownloader()
+        public ImgurImageDownloader(IConfiguration configuration)
         {
             _httpClient = new HttpClient();
-            _httpClient.DefaultRequestHeaders.Add("User-Agent", "Felipe-PC");
+            _httpClient.DefaultRequestHeaders.Add("User-Agent", "RedditScrapper-PC");
 
+            basePath = configuration.GetSection("DOWNLOADPATH").Value;
         }
 
         public async Task<RoutineExecutionFileDTO> DownloadLinkAsync(RedditPostMessage downloadObject)
         {
-            string path = $"D:\\DUMP\\Scrapper\\{downloadObject.RoutineDate.ToString("MM-dd")}\\{downloadObject.SubredditName}";
+            string path = $"{basePath}\\{downloadObject.RoutineDate.ToString("MM-dd")}\\{downloadObject.SubredditName}";
             string fileName = $"{downloadObject.Classification}-{downloadObject.Url.Split("/").Last()}";
 
             bool exists = Directory.Exists(path);

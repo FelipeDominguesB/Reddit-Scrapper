@@ -13,28 +13,32 @@ using Microsoft.EntityFrameworkCore;
 using RedditScrapper.Context;
 
 IHost host = Host.CreateDefaultBuilder(args)
-    .ConfigureServices(services =>
+    .ConfigureAppConfiguration(config =>
+    {
+        config.AddEnvironmentVariables(prefix: "REDDITSCRAPPER_");
+
+        IConfigurationRoot cfg = config.Build();
+    })
+    .ConfigureServices((hostContext, services) =>
     {
         services.AddHostedService<Worker>();
         services.AddSingleton<IRedditScrapperService, RedditScrapperService>();
         services.AddSingleton<IWorkerService, ContentDownloadWorkerService>();
         services.AddSingleton<IDomainImageDownloaderPlugin, ImgurImageDownloader>();
-        services.AddSingleton<IDomainImageDownloaderPlugin, RedgifsImageDownloader>();
         services.AddSingleton<IDomainImageDownloaderPlugin, RedditImageDownloader>();
         services.AddSingleton<IQueueService<RedditPostMessage>, SubredditPostQueueManagementService>();
         services.AddSingleton<IRoutineService, RoutineService>();
         services.AddAutoMapper(typeof(RoutineProfile));
 
 
-        services.AddDbContext<RedditScrapperContext>(
-            options => options.UseSqlServer("Server=localhost;Database=RedditScrapper;Trusted_Connection=False;Encrypt=false; User Id=sa;Password=Pass@word1")
-        );
+        services.AddDbContext<RedditScrapperContext>(options => options.UseSqlServer(hostContext.Configuration.GetValue<string>("CONNECTIONSTRING")));
 
         services.AddHttpClient<RedditHttpClient>(client =>
         {
-            client.BaseAddress = new Uri("https://www.reddit.com/");
-            client.DefaultRequestHeaders.Add("User-Agent", "Felipe-PC");
+            client.BaseAddress = new Uri(hostContext.Configuration.GetSection("REDDIT:URL").Value);
+            client.DefaultRequestHeaders.Add("User-Agent", hostContext.Configuration.GetSection("REDDIT:DEFAULTAGENT").Value);
         });
+
     })
     .Build();
 

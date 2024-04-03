@@ -32,7 +32,7 @@ namespace RedditScrapper.Services.Worker
             _logger = logger;
         }
 
-        public async Task<bool> Start()
+        public async Task Start()
         {
 
             ICollection<Routine> pendingRoutines = await _routineService.GetPendingRoutines();
@@ -40,7 +40,6 @@ namespace RedditScrapper.Services.Worker
             foreach (Routine routine in pendingRoutines)
                 await RunRoutine(routine);
 
-            return true;
         }
 
         private async Task RunRoutine(Routine routine)
@@ -80,12 +79,6 @@ namespace RedditScrapper.Services.Worker
                 Console.WriteLine("Exception reading queue. Message: " + ex.Message);
             }
 
-        }
-
-
-        public Task<bool> Stop()
-        {
-            throw new NotImplementedException();
         }
     }
 }

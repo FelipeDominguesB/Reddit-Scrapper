@@ -10,8 +10,16 @@ using RedditScrapper.Services.Routines;
 using RedditScrapper.Mapper;
 
 IHost host = Host.CreateDefaultBuilder(args)
-    .ConfigureServices(services =>
+    .ConfigureAppConfiguration(config =>
     {
+        config.AddEnvironmentVariables(prefix: "REDDITSCRAPPER_");
+
+        IConfigurationRoot cfg = config.Build();
+    })
+    .ConfigureServices((hostContext, services) =>
+    {
+
+
         services.AddHostedService<Worker>();
 
         services.AddSingleton<IWorkerService, ContentFetchWorkerService>();
@@ -20,14 +28,13 @@ IHost host = Host.CreateDefaultBuilder(args)
         services.AddSingleton<IRoutineService, RoutineService>();
         services.AddAutoMapper(typeof(RoutineProfile));
 
-        services.AddDbContext<RedditScrapperContext>(
-            options => options.UseSqlServer("Server=localhost;Database=RedditScrapper;Trusted_Connection=False;Encrypt=false; User Id=sa;Password=Pass@word1")
-        );
+        services.AddDbContext<RedditScrapperContext>(options => options.UseSqlServer(hostContext.Configuration.GetValue<string>("CONNECTIONSTRING")));
+
 
         services.AddHttpClient<RedditHttpClient>(client =>
         {
-            client.BaseAddress = new Uri("https://www.reddit.com/");
-            client.DefaultRequestHeaders.Add("User-Agent", "Felipe-PC"); 
+            client.BaseAddress = new Uri(hostContext.Configuration.GetSection("REDDIT:URL").Value);
+            client.DefaultRequestHeaders.Add("User-Agent", hostContext.Configuration.GetSection("REDDIT:DEFAULTAGENT").Value);
         });
     })
     .Build();

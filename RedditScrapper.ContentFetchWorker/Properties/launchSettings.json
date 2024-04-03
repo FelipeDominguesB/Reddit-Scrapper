@@ -5,11 +5,12 @@
       "dotnetRunMessages": true,
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Development",
-        "RedditScrapper_Database_ConnectionString": "Development",
-        "RedditScrapper_RabbitMQConfiguration_Server": "",
-        "RedditScrapper_RabbitMQConfiguration_User": "",
-        "RedditScrapper_RabbitMQConfiguration_Password": "",
-        "RedditScrapper_RabbitMQConfiguration_Queue": ""
+        "REDDITSCRAPPER_CONNECTIONSTRING": "Server=localhost;Database=RedditScrapper;Trusted_Connection=False;Encrypt=false; User Id=sa;Password=Pass@word1",
+        "REDDITSCRAPPER_DOWNLOADPATH": "D:\\DUMP\\Scrapper",
+        "REDDITSCRAPPER_REDDIT__URL": "https://www.reddit.com/",
+        "REDDITSCRAPPER_REDDIT__DEFAULTAGENT": "REDDITSCRAPPER-PC",
+        "REDDITSCRAPPER_RabbitMQConfiguration__HostName": "localhost",
+        "REDDITSCRAPPER_RabbitMQConfiguration__QueueName": "reddit_posts"
       }
     }
   }
