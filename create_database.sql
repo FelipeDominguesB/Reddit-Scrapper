@@ -1,3 +1,7 @@
+CREATE DATABASE RedditScrapper;
+
+Use RedditScrapper;
+
 IF OBJECT_ID(N'[__EFMigrationsHistory]') IS NULL
 BEGIN
     CREATE TABLE [__EFMigrationsHistory] (
@@ -297,4 +301,3 @@ GO
 
 COMMIT;
 GO
-
