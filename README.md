@@ -8,4 +8,4 @@ Esse projeto é um web-scrapper para a plataforma/rede-social Reddit. O objetivo
 - Um banco de dados relacional, onde toda persistência de dados é realizado
 
 Esse projeto também tem a dependência de uma instância do RabbitMQ, componente essencial para comunicação entre os workers.
-A API e os dois service workers foram desenvolvidos (e, por tanto, necessitam) do .NET 8. O banco de dados utilizado foi o SQL Server, você pode encontrar o script de criação do banco [aqui](https://github.com/FelipeDominguesB/Reddit-Scrapper/blob/main/create_database.sql).
+A API e os dois service workers foram desenvolvidos (e, por tanto, necessitam) do .NET 6. O banco de dados utilizado foi o SQL Server, você pode encontrar o script de criação do banco [aqui](https://github.com/FelipeDominguesB/Reddit-Scrapper/blob/main/create_database.sql).
