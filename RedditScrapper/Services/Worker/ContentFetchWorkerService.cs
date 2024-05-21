@@ -32,7 +32,7 @@ namespace RedditScrapper.Services.Worker
             _logger = logger;
         }
 
-        public async Task Start()
+        public async Task Run()
         {
 
             ICollection<Routine> pendingRoutines = await _routineService.GetPendingRoutines();

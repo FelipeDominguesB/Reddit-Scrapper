@@ -15,19 +15,14 @@ namespace RedditScrapper.ContentDownloadWorker
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            try
+            _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
+            await _workerService.Run();
+
+            while (!stoppingToken.IsCancellationRequested)
             {
-                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-                await _workerService.Start();
+                await Task.Delay(-1, stoppingToken);
             }
-            catch(OperationCanceledException ex)
-            {
-                _logger.LogError("Operation canceled exception. Message: " + ex.Message);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError("Unexpected exception. Message: " + ex.Message);
-            }   
+            
         }
     }
 }

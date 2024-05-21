@@ -8,7 +8,7 @@ namespace RedditScrapper.Services.Worker
 {
     public interface IWorkerService
     {
-        public Task Start();
+        public Task Run();
 
     }
 }

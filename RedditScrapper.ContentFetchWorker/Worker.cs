@@ -18,15 +18,14 @@ namespace RedditScrapper.ContentFetchWorker
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             DateTime whenToRun = DateTime.UtcNow;
-
-            while (true)
+            
+            while (!stoppingToken.IsCancellationRequested)
             {
-                if(DateTime.UtcNow > whenToRun)
+                if (DateTime.UtcNow > whenToRun)
                 {
                     _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-                    Console.WriteLine("Worker starting");
-                    await _workerService.Start();
                     whenToRun = whenToRun.AddMinutes(3);
+                    await _workerService.Run();
                 }
             }
         }
