@@ -3,7 +3,6 @@ using System.Net.Http;
 using RedditScrapper.Model;
 using RedditScrapper.Model.Message;
 using RedditScrapper.RedditClient;
-using RedditScrapper.Services.Worker;
 using RedditScrapper.Services.Scrapper;
 using RedditScrapper.Services.Plugin;
 using RedditScrapper.Services.Queue;
@@ -23,11 +22,10 @@ IHost host = Host.CreateDefaultBuilder(args)
     {
         services.AddHostedService<Worker>();
         services.AddSingleton<IRedditScrapperService, RedditScrapperService>();
-        services.AddSingleton<IWorkerService, ContentDownloadWorkerService>();
         services.AddSingleton<IDomainImageDownloaderPlugin, ImgurImageDownloader>();
         services.AddSingleton<IDomainImageDownloaderPlugin, RedditImageDownloader>();
         services.AddSingleton<IQueueService<RedditPostMessage>, SubredditPostQueueManagementService>();
-        services.AddSingleton<IRoutineService, RoutineService>();
+        services.AddSingleton<IRoutineManagementService, RoutineManagementService>();
         services.AddAutoMapper(typeof(RoutineProfile));
 
 

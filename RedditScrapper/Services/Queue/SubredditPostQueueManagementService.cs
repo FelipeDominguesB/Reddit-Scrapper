@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using RedditScrapper.Configuration;
 using RedditScrapper.Context;
 using RedditScrapper.Model;
@@ -17,9 +18,13 @@ namespace RedditScrapper.Services.Queue
     public class SubredditPostQueueManagementService : QueueManagementService<RedditPostMessage>
     {
         private readonly IRedditScrapperService _redditService;
-        private readonly IRoutineService _routineService;
+        private readonly IRoutineManagementService _routineService;
 
-        public SubredditPostQueueManagementService(IRedditScrapperService redditService, IRoutineService routineService, IConfiguration configuration) : base(configuration)
+        public SubredditPostQueueManagementService(
+            IRedditScrapperService redditService, 
+            IRoutineManagementService routineService, 
+            IConfiguration configuration, 
+            ILogger<SubredditPostQueueManagementService> logger) : base(configuration, logger)
         {
             _redditService = redditService;
             _routineService = routineService;

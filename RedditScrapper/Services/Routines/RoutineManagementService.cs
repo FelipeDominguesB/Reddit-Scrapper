@@ -6,6 +6,9 @@ using RedditScrapper.Domain.Entities;
 using RedditScrapper.Exceptions;
 using RedditScrapper.Model.DTOs.Routine;
 using RedditScrapper.Model.Enums;
+using RedditScrapper.Model.Message;
+using RedditScrapper.Services.Queue;
+using RedditScrapper.Services.Scrapper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,15 +18,17 @@ using static System.Formats.Asn1.AsnWriter;
 
 namespace RedditScrapper.Services.Routines
 {
-    public class RoutineService : IRoutineService
+    public class RoutineManagementService : IRoutineManagementService
     {
         private readonly IServiceProvider _provider;
         private readonly IMapper _mapper;
-        public RoutineService(IServiceProvider provider, IMapper mapper)
+        public RoutineManagementService(IServiceProvider provider, IMapper mapper)
         {
             _provider = provider;
             _mapper = mapper;
         }
+
+        
 
         public async Task<RoutineExecutionDTO> AddRoutineExecution(RoutineExecutionDTO routineExecutionDTO)
         {
@@ -214,5 +219,7 @@ namespace RedditScrapper.Services.Routines
         {
             throw new NotImplementedException();
         }
+
+        
     }
 }

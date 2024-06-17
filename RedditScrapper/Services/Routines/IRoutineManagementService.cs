@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace RedditScrapper.Services.Routines
 {
-    public interface IRoutineService
+    public interface IRoutineManagementService
     {
         public Task<ICollection<RoutineDTO>> GetRoutines();
         public Task<ICollection<Routine>> GetPendingRoutines();

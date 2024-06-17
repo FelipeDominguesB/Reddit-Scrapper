@@ -3,7 +3,6 @@ using RedditScrapper.Context;
 using Microsoft.EntityFrameworkCore;
 using RedditScrapper.RedditClient;
 using RedditScrapper.Model.Message;
-using RedditScrapper.Services.Worker;
 using RedditScrapper.Services.Scrapper;
 using RedditScrapper.Services.Queue;
 using RedditScrapper.Services.Routines;
@@ -22,10 +21,11 @@ IHost host = Host.CreateDefaultBuilder(args)
 
         services.AddHostedService<Worker>();
 
-        services.AddSingleton<IWorkerService, ContentFetchWorkerService>();
         services.AddSingleton<IQueueService<RedditPostMessage>, SubredditPostQueueManagementService>();
         services.AddSingleton<IRedditScrapperService, RedditScrapperService>();
-        services.AddSingleton<IRoutineService, RoutineService>();
+        services.AddSingleton<IRoutineManagementService, RoutineManagementService>();
+        services.AddSingleton<IRoutineExecutionService, RoutineExecutionService>();
+
         services.AddAutoMapper(typeof(RoutineProfile));
 
         services.AddDbContext<RedditScrapperContext>(options => options.UseSqlServer(hostContext.Configuration.GetValue<string>("CONNECTIONSTRING")));

@@ -1,18 +1,15 @@
-using RedditScrapper.Model;
-using RedditScrapper.Services;
-using RedditScrapper.Services.Worker;
+using RedditScrapper.Services.Routines;
 
 namespace RedditScrapper.ContentFetchWorker
 {
     public class Worker : BackgroundService
     {
         private readonly ILogger<Worker> _logger;
-        private readonly IWorkerService _workerService;
-
-        public Worker(ILogger<Worker> logger, IWorkerService workerService)
+        private readonly IRoutineExecutionService _routineExecutionService;
+        public Worker(ILogger<Worker> logger, IRoutineExecutionService routineExecutionService)
         {
             _logger = logger;
-            _workerService = workerService;
+            _routineExecutionService = routineExecutionService;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -21,12 +18,9 @@ namespace RedditScrapper.ContentFetchWorker
             
             while (!stoppingToken.IsCancellationRequested)
             {
-                if (DateTime.UtcNow > whenToRun)
-                {
-                    _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-                    whenToRun = whenToRun.AddMinutes(3);
-                    await _workerService.Run();
-                }
+
+                await _routineExecutionService.RunPendingRoutines();
+                await Task.Delay(1000 * 60 * 3, stoppingToken);
             }
         }
     }

@@ -28,7 +28,7 @@ namespace RedditScrapper.Services.Scrapper
             _httpClient = httpClient;
         }
 
-        public async Task<ICollection<RedditPostMessage>> ReadSubredditData(string subredditName)
+        public async Task<ICollection<RedditPostMessage>> ReadSubredditPosts(string subredditName)
         {
             List<RedditPostMessage> links = new List<RedditPostMessage>();
             int classification = 0;
@@ -63,7 +63,7 @@ namespace RedditScrapper.Services.Scrapper
             return links;
         }
 
-        public async Task<ICollection<RedditPostMessage>> ReadSubredditData(string subredditName, int postCount, SortingEnum postSorting)
+        public async Task<ICollection<RedditPostMessage>> ReadSubredditPosts(string subredditName, int postCount, SortingEnum postSorting)
         {
             List<RedditPostMessage> links = new List<RedditPostMessage>();
             int classification = 0;

@@ -1,27 +1,26 @@
-using RedditScrapper.Services.Worker;
+using RedditScrapper.Model.Message;
+using RedditScrapper.Services.Queue;
+using RedditScrapper.Services.Routines;
 
 namespace RedditScrapper.ContentDownloadWorker
 {
     public class Worker : BackgroundService
     {
         private readonly ILogger<Worker> _logger;
-        private readonly IWorkerService _workerService;
+        private readonly IQueueService<RedditPostMessage> _queueService;
 
-        public Worker(ILogger<Worker> logger, IWorkerService workerService, IConfiguration configuration)
+        public Worker(ILogger<Worker> logger, IConfiguration configuration, IQueueService<RedditPostMessage> queueService)
         {
             _logger = logger;
-            _workerService = workerService;
+            _queueService = queueService;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-            await _workerService.Run();
+            _queueService.Read();
 
-            while (!stoppingToken.IsCancellationRequested)
-            {
-                await Task.Delay(-1, stoppingToken);
-            }
+            await Task.Delay(-1, stoppingToken);
             
         }
     }

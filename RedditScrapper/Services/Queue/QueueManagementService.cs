@@ -10,19 +10,24 @@ using RabbitMQ.Client.Events;
 using System.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using RedditScrapper.Configuration;
+using Microsoft.Extensions.Logging;
+using RedditScrapper.Model.Message;
 
 namespace RedditScrapper.Services.Queue
 {
     public abstract class QueueManagementService<TItem> : IQueueService<TItem> where TItem : class
     {
+        private readonly ILogger<QueueManagementService<RedditPostMessage>> _logger;
         private readonly RabbitMQConfiguration rabbitMQConfiguration;        
-        public QueueManagementService(IConfiguration configuration) 
+        public QueueManagementService(IConfiguration configuration, ILogger<QueueManagementService<RedditPostMessage>> logger) 
         {
+            _logger = logger;
             rabbitMQConfiguration = configuration.GetSection("RabbitMQConfiguration").Get<RabbitMQConfiguration>();
         }
 
         public void Publish(TItem item)
         {
+
             ConnectionFactory connectionFactory = new ConnectionFactory() { HostName = rabbitMQConfiguration.HostName };
             using IConnection connection = connectionFactory.CreateConnection();
             using IModel channel = connection.CreateModel();
@@ -45,6 +50,8 @@ namespace RedditScrapper.Services.Queue
 
         public void Read()
         {
+            _logger.LogInformation("Starting to read queue");
+
             ConnectionFactory connectionFactory = new ConnectionFactory() { HostName = rabbitMQConfiguration.HostName };
             connectionFactory.DispatchConsumersAsync = true;
 
@@ -77,6 +84,9 @@ namespace RedditScrapper.Services.Queue
             };
 
             channel.BasicConsume(queue: rabbitMQConfiguration.QueueName, autoAck: false, consumer: consumer);
+
+            _logger.LogInformation("Queue consume has started");
+
         }
 
 
