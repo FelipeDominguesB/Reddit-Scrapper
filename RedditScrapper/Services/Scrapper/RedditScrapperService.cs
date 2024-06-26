@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Update;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using RedditScrapper.Context;
@@ -13,6 +14,7 @@ using RedditScrapper.Model.Message;
 using RedditScrapper.RedditClient;
 using RedditScrapper.RedditClient.Model;
 using RedditScrapper.Services.Plugin;
+using RedditScrapper.Services.Storage;
 
 namespace RedditScrapper.Services.Scrapper
 {
@@ -75,13 +77,18 @@ namespace RedditScrapper.Services.Scrapper
                 RedditFeedResponse redditFeedResponse = await _redditClient.ReadSubredditPage(subredditName, GetSortingNameFromEnum(postSorting), after);
                 foreach (RedditPost post in redditFeedResponse.Data.Children)
                 {
+                    classification++;
+
+                    if (post.Data.IsGallery)
+                        continue;
+
                     RedditPostMessage redditPostMessage = new RedditPostMessage();
 
                     redditPostMessage.Title = post.Data.Title;
                     redditPostMessage.Domain = post.Data.Domain;
                     redditPostMessage.SubredditName = post.Data.Subreddit;
                     redditPostMessage.Url = post.Data.UrlOverridenByDest;
-                    redditPostMessage.Classification = ++classification;
+                    redditPostMessage.Classification = classification;
                     redditPostMessage.RoutineDate = routineStartDate;
 
                     links.Add(redditPostMessage);
@@ -110,7 +117,8 @@ namespace RedditScrapper.Services.Scrapper
             if (downloader == null)
                 throw new Exception($"Downloader not found for {subredditDownloadLink.Domain} domain");
 
-            return await downloader.DownloadLinkAsync(subredditDownloadLink);
+            return await downloader.DownloadMedia(subredditDownloadLink);
+
         }
 
         public async Task<bool> DownloadRedditPostCollection(ICollection<RedditPostMessage> links)
@@ -127,7 +135,7 @@ namespace RedditScrapper.Services.Scrapper
                     if (downloader == null)
                         continue;
 
-                    await downloader.DownloadLinkAsync(link);
+                    await downloader.DownloadMedia(link);
                 }
                 catch (Exception ex)
                 {

@@ -43,7 +43,7 @@ namespace RedditScrapper.Services.Queue
                 routineExecutionFileDTO = new RoutineExecutionFileDTO()
                 {
                     Classification = item.Classification,
-                    SourceUrl = item.Url,
+                    SourceUrl = item.Url ?? "NO URL",
                     RoutineExecutionId = item.ExecutionId,
                     Succeded = false
                 };

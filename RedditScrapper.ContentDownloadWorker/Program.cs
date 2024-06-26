@@ -10,6 +10,7 @@ using RedditScrapper.Mapper;
 using RedditScrapper.Services.Routines;
 using Microsoft.EntityFrameworkCore;
 using RedditScrapper.Context;
+using RedditScrapper.Services.Storage;
 
 IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureAppConfiguration(config =>
@@ -21,6 +22,10 @@ IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices((hostContext, services) =>
     {
         services.AddHostedService<Worker>();
+
+        services.AddSingleton<IStorageFacade, StorageFacade>();
+        services.AddSingleton<IStorageStrategy, FileSystemStrategy>();
+
         services.AddSingleton<IRedditScrapperService, RedditScrapperService>();
         services.AddSingleton<IDomainImageDownloaderPlugin, ImgurImageDownloader>();
         services.AddSingleton<IDomainImageDownloaderPlugin, RedditImageDownloader>();

@@ -12,6 +12,6 @@ namespace RedditScrapper.Services.Plugin
     public interface IDomainImageDownloaderPlugin
     {
         public string Id { get; set; }
-        Task<RoutineExecutionFileDTO> DownloadLinkAsync(RedditPostMessage downloadObject);
+        Task<RoutineExecutionFileDTO> DownloadMedia(RedditPostMessage downloadObject);
     }
 }

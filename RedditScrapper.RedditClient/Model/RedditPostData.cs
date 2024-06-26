@@ -19,7 +19,10 @@ namespace RedditScrapper.RedditClient.Model
 
         [JsonPropertyName("domain")]
         public string Domain { get; set; }
-        
+
+        [JsonPropertyName("is_gallery")]
+        public bool IsGallery { get; set; }
+
         [JsonPropertyName("url_overridden_by_dest")]
         public string UrlOverridenByDest { get; set; }
 

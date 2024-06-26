@@ -17,7 +17,6 @@ namespace RedditScrapper.API.Controllers
 
         public RoutineController(IRoutineManagementService routineService, IConfiguration configuration) {
             _routineService = routineService;
-            configuration.GetChildren();
         }
 
         [HttpGet]

@@ -3,7 +3,9 @@ using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.Extensions.Configuration;
 using RedditScrapper.Model;
 using RedditScrapper.Model.DTOs.Routine;
+using RedditScrapper.Model.DTOs.Storage;
 using RedditScrapper.Model.Message;
+using RedditScrapper.Services.Storage;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -17,17 +19,17 @@ namespace RedditScrapper.Services.Plugin
     {
         private readonly HttpClient _httpClient;
         private readonly string basePath;
+        private readonly IStorageFacade _storageFacade;
         public string Id { get; set; } = "i.imgur.com";
 
-        public ImgurImageDownloader(IConfiguration configuration)
+        public ImgurImageDownloader(IStorageFacade storageFacade)
         {
             _httpClient = new HttpClient();
             _httpClient.DefaultRequestHeaders.Add("User-Agent", "RedditScrapper-PC");
-
-            basePath = configuration.GetSection("DOWNLOADPATH").Value;
+            _storageFacade = storageFacade;
         }
 
-        public async Task<RoutineExecutionFileDTO> DownloadLinkAsync(RedditPostMessage downloadObject)
+        public async Task<RoutineExecutionFileDTO> DownloadMedia(RedditPostMessage downloadObject)
         {
             string path = $"{basePath}\\{downloadObject.RoutineDate.ToString("MM-dd")}\\{downloadObject.SubredditName}";
             string fileName = $"{downloadObject.Classification}-{downloadObject.Url.Split("/").Last()}";
@@ -65,29 +67,20 @@ namespace RedditScrapper.Services.Plugin
                 fileName = fileName.Replace(".gifv", node.Attributes["property"].Value == "og:video" ? ".mp4" : ".jpg");
             }
 
-            string filePath = $"{path}\\{fileName}";
-
-
             HttpResponseMessage response = await _httpClient.GetAsync(downloadObject.Url);
 
             if (response.Content.Headers.ContentLength == 503)
                 throw new Exception();
 
-            using (var filestream = File.Create(filePath))
-            {
-                var stream = response.Content.ReadAsStream();
-                stream.Seek(0, SeekOrigin.Begin);
-                await stream.CopyToAsync(filestream);
-            }
-
-
+            FileDTO fileDTO = await _storageFacade.WriteFile(response.Content.ReadAsStream(), fileName, downloadObject);
+            
             RoutineExecutionFileDTO result = new RoutineExecutionFileDTO()
             {
                 Classification = downloadObject.Classification,
-                DownloadDirectory = path,
+                DownloadDirectory = fileDTO.FilePath,
                 SourceUrl = downloadObject.Url,
                 RoutineExecutionId = downloadObject.ExecutionId,
-                FileName = fileName,
+                FileName = fileDTO.FileName,
                 Succeded = true
             };
 
